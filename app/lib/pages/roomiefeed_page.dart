@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ten_ant/cubits/user_auth.dart';
 
 class RoomieFeedPage extends StatefulWidget {
-  const RoomieFeedPage({super.key});
+  final UserAuthCubit userCubit;
+  const RoomieFeedPage({super.key, required this.userCubit});
 
   @override
   State<RoomieFeedPage> createState() => _RoomieFeedPageState();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
+import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
@@ -46,6 +47,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawerWidget(userCubit: widget.userCubit),
       appBar: AppBar(
         title: const Text('Flat Feed'),
       ),

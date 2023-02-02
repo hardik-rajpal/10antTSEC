@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MainDrawer {
   static const String auth = '/auth';
   static const String flatfeed = '/flatfeed';
+  static const String roomiefeed = '/roomiefeed';
+  static const String profile = '/profile';
 }
 
 class Values {
