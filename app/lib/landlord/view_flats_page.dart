@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/components/drawer.dart';
-import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/landlord/add_flats.dart';
-import 'package:ten_ant/landlord/stats_flats.dart';
 import 'package:ten_ant/landlord/view_flat_one.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';

@@ -63,3 +63,9 @@ class Flat {
   ];
   Flat();
 }
+
+class FlatStat {
+  List<int> statnums = [];
+  List<String> reviews = [];
+  FlatStat(this.statnums, this.reviews);
+}

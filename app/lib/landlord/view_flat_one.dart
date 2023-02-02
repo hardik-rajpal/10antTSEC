@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/landlord/stats_flats.dart';
 import 'package:ten_ant/models/common.dart';
 
 class ViewSingleFlatPage extends StatefulWidget {
@@ -22,7 +21,21 @@ class _ViewSingleFlatPageState extends State<ViewSingleFlatPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Flat 1')),
       drawer: MainDrawerWidget(userCubit: widget.userCubit),
-      body: FlatViewCard(data: widget.flat),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            FlatViewCard(data: widget.flat),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return StatsFlats(flat: widget.flat);
+                  }));
+                },
+                child: const Text('View Activity'))
+          ],
+        ),
+      ),
     );
   }
 }

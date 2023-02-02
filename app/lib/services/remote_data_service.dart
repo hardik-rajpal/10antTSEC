@@ -51,4 +51,11 @@ class RemoteDataService {
       return [Flat(), Flat(), Flat()];
     });
   }
+
+  Future<FlatStat> getFlatStats(String uuid) {
+    return Future.delayed(
+        const Duration(milliseconds: 500),
+        () => FlatStat([10, 20, 5],
+            ['Bad neighbourhood', 'High crime rates', 'Low price']));
+  }
 }
