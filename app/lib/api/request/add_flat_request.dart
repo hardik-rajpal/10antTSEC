@@ -3,43 +3,50 @@ import 'package:json_annotation/json_annotation.dart';
 part 'add_flat_request.g.dart';
 
 @JsonSerializable()
-class AddFlatRequest {
+class Flat {
+  @JsonKey(name: "id")
+  String id = '';
+
   @JsonKey(name: "location")
-  String? location;
+  String location = '';
+
+  @JsonKey(name: "pictures")
+  List<String> pictures = [];
 
   @JsonKey(name: "district")
-  String? district;
+  String district = '';
 
   @JsonKey(name: "contact")
-  String? contact;
+  String contact = '';
 
   @JsonKey(name: "description")
-  String? description;
+  String description = '';
 
   @JsonKey(name: "street_address")
-  String? street;
+  String street = '';
 
   @JsonKey(name: "bhk")
-  int? bhk;
+  int bhk = 0;
 
   @JsonKey(name: "rent")
-  int? rent;
+  int rent = 0;
 
   @JsonKey(name: "area")
-  int? area;
+  int area = 0;
 
   @JsonKey(name: "toilets")
-  int? toilets;
+  int toilets = 0;
 
-  @JsonKey(name: "amenities")
-  List<String>? amenities;
+  @JsonKey(name: "amenities_5km")
+  List<String> amenities = [];
 
   @JsonKey(name: "tags")
-  List<String>? features;
+  List<String> features = [];
 
+  List<List<String>> likeDislikeQuestionArray = [];
 
-  AddFlatRequest();
-  factory AddFlatRequest.fromJson(Map<String, dynamic> json) =>
-      _$AddFlatRequestFromJson(json);
-  Map<String, dynamic> toJson() => _$AddFlatRequestToJson(this);
+  Flat();
+  factory Flat.fromJson(Map<String, dynamic> json) =>
+      _$FlatFromJson(json);
+  Map<String, dynamic> toJson() => _$FlatToJson(this);
 }

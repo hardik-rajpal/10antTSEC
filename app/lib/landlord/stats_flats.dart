@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:ten_ant/components/buttons.dart';
-import 'package:ten_ant/components/drawer.dart';
-import 'package:ten_ant/models/common.dart';
-import 'package:ten_ant/pages/flatfeed_page.dart';
+import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
-import 'package:ten_ant/utils/constants.dart';
 
 class StatsFlats extends StatefulWidget {
   final Flat flat;
@@ -21,7 +15,7 @@ class _StatsFlatsState extends State<StatsFlats> {
   List<int> statnums = [];
   @override
   void initState() {
-    RemoteDataService().getFlatStats(widget.flat.uuid).then((value) {
+    RemoteDataService().getFlatStats(widget.flat.id).then((value) {
       setState(() {
         reviews = value.reviews;
         statnums = value.statnums;
@@ -39,7 +33,7 @@ class _StatsFlatsState extends State<StatsFlats> {
       body: Column(
         children: [
           Row(
-            children: [
+            children: const [
               // ReactionCountButton(icon: Styles.likeIcon, userList: )
             ],
           )

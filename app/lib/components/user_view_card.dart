@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/components/images.dart';
-import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/utils/constants.dart';
 
 class UserViewCard extends StatefulWidget {
@@ -27,13 +27,13 @@ class _UserViewCardState extends State<UserViewCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              details.user.name,
+              details.name,
               style: Styles.textStyle1,
             ),
             Image(
               width: 200,
               height: 200,
-              image: getCachedNetworkImage(details.user.profilePicLink),
+              image: getCachedNetworkImage(details.profilePicLink),
             ),
           ],
         ),

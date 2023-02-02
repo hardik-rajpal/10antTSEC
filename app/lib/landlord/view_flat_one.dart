@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/landlord/stats_flats.dart';
-import 'package:ten_ant/models/common.dart';
 
 class ViewSingleFlatPage extends StatefulWidget {
   final Flat flat;
