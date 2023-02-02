@@ -13,10 +13,10 @@ UserDetails _$UserDetailsFromJson(Map<String, dynamic> json) => UserDetails()
   ..accountType = json['accountType'] as String
   ..profilePicLink = json['picture'] as String
   ..email = json['email'] as String
-  ..age = json['age'] as String
+  ..age = json['age'] as int
   ..gender = json['gender'] as String
   ..languages = json['languages'] as String
-  ..budget = json['budget'] as String
+  ..budget = json['budget'] as int
   ..locationPriorities = (json['location_priorities'] as List<dynamic>)
       .map((e) => e as String)
       .toList()

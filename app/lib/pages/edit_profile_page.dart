@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/services/remote_data_service.dart';
+import 'package:ten_ant/utils/constants.dart';
 
 class EditProfilePage extends StatefulWidget {
   final UserAuthCubit userCubit;
@@ -13,16 +17,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   final interests = [
-    'afffffffffffffffffffaa',
-    'bffffffffffffffffffffffffbb',
-    'rrr',
-    'ffff',
-    'eded',
-    'ffedf'
+    'writing',
+    'reading',
+    'shows',
   ];
   final selected = [0, 0, 0, 0, 0, 0];
   var number = 0;
-
+  UserDetails details = UserDetails();
   Widget _buildChips(BuildContext context) {
     List<Widget> w = [];
     int length = interests.length;
@@ -62,8 +63,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  final TextEditingController _locController = TextEditingController();
-
+  String gender = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,89 +78,83 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     children: <Widget>[
                       TextFormField(
                         textInputAction: TextInputAction.next,
-                        controller: _locController,
                         validator: (headline) {
                           if (headline == null || headline.isEmpty) {
                             return "Cant be empty";
                           }
                           return null;
                         },
+                        initialValue: widget.userCubit.state.user!.username,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.person),
-                          hintText: 'Enter the location (url) of your flat',
                           labelText: 'Username',
                         ),
+                        onChanged: (value) {
+                          details.username = value;
+                        },
                       ),
                       TextFormField(
-                        // initialValue: widget.userCubit.state,
+                        initialValue: widget.userCubit.state.user!.name,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.person_2_outlined),
-                          hintText: 'Enter the district',
                           labelText: 'Full Name',
                         ),
+                        onChanged: (value) {
+                          details.name = value;
+                        },
                       ),
                       TextFormField(
+                        initialValue: widget.userCubit.state.user!.email,
                         decoration: const InputDecoration(
-                          icon: Icon(Icons.contact_emergency),
-                          hintText: 'Enter your contact',
-                          labelText: 'Contact',
+                          icon: FaIcon(FontAwesomeIcons.at),
+                          labelText: 'Email',
                         ),
+                        onChanged: (value) {
+                          details.email = value;
+                        },
                       ),
                       TextFormField(
+                        initialValue: '18',
                         decoration: const InputDecoration(
-                          icon: Icon(Icons.description),
-                          hintText: 'Enter a description',
-                          labelText: 'Description',
+                          icon: FaIcon(FontAwesomeIcons.hashtag),
+                          labelText: 'Age',
                         ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          details.age = int.parse(value);
+                        },
+                      ),
+                      Row(
+                        children: [
+                          const Text(
+                            'Gender: ',
+                            style: Styles.textStyle1,
+                          ),
+                          DropdownButton<String>(
+                              onChanged: (String? choice) {
+                                if (choice != null) {
+                                  setState(() {
+                                    gender = choice;
+                                    details.gender = choice;
+                                  });
+                                }
+                              },
+                              items: ['Male', 'Female', 'Other']
+                                  .map((e) => DropdownMenuItem<String>(
+                                      value: 'Male', child: Text(e)))
+                                  .toList()),
+                        ],
                       ),
                       TextFormField(
+                        initialValue: '1000',
                         decoration: const InputDecoration(
-                          icon: Icon(Icons.streetview),
-                          hintText: 'Enter street address',
-                          labelText: 'Street Address',
+                          icon: FaIcon(FontAwesomeIcons.rupeeSign),
+                          labelText: 'Budget',
                         ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.bedroom_baby),
-                          hintText: 'Enter specifications (bhk)',
-                          labelText: 'Bhk',
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.money),
-                          hintText: 'Enter preferred rent',
-                          labelText: 'Rent',
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.area_chart),
-                          hintText: 'Enter area',
-                          labelText: 'Area',
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.money),
-                          hintText: 'Enter preferred rent',
-                          labelText: 'Rent',
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.three_g_mobiledata),
-                          hintText: 'Enter number of toilets',
-                          labelText: 'Toilets',
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.airplanemode_inactive_sharp),
-                          hintText: 'Enter amenities other',
-                          labelText: 'Amentities',
-                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          details.budget = int.parse(value);
+                        },
                       ),
                       Center(
                           child:
@@ -169,12 +163,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
+                                await RemoteDataService().registerUser(details);
                               }
                             },
                             child: const Text('Submit'),
@@ -188,12 +183,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ),
                         ],
                       ),
-                      // new Container(
-                      //     padding: const EdgeInsets.only(left: 150.0, top: 40.0),
-                      //     child: Flat(
-                      //       child: const Text('Submit'),
-                      //         onPressed: null,
-                      //     )),
                     ],
                   ),
                 ))));

@@ -4,7 +4,6 @@ import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/pages/edit_profile_page.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
-import 'package:ten_ant/utils/constants.dart';
 import 'package:ten_ant/utils/helpers.dart';
 
 class LoginPage extends StatefulWidget {

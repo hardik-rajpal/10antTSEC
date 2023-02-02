@@ -23,9 +23,8 @@ abstract class TenantApi {
   @rt.GET("/getflatfeed")
   Future<List<Flat>> getFlatFeed(@rt.Body() String? uuid);
 
+  @rt.POST('/saveUser')
+  Future<UserDetails> addUserToDB(@rt.Body() UserDetails details);
   // @rt.GET("/getflatfeed")
   // Future<void> submitUserFlatInteraction(@rt.Body() String uuid, @rt.Body() String uuid2) {}
-
-
-
 }

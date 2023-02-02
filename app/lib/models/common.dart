@@ -1,31 +1,29 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ten_ant/utils/constants.dart';
 import 'package:ten_ant/utils/helpers.dart';
 
 @JsonSerializable()
 class User {
-
   String uuid;
 
-  @JsonKey(name:"username")
+  @JsonKey(name: "username")
   String username;
 
-  @JsonKey(name:"name")
+  @JsonKey(name: "name")
   String name;
 
   String identifier = 'w';
-  
+
   String accountType = 'google';
-  
-  @JsonKey(name:"picture")
+
+  @JsonKey(name: "picture")
   String profilePicLink;
-  
-  @JsonKey(name:"email")
+
+  @JsonKey(name: "email")
   String email = '';
-  
+
   String token = '';
-  
+
   bool authenticated = false;
 
   User(this.uuid, this.username, this.name, this.accountType,
@@ -34,6 +32,8 @@ class User {
     return {
       "uuid": uuid,
       "name": name,
+      "username": username,
+      "email": email,
       "identifier": identifier,
       "accountType": accountType,
       "profilePicLink": profilePicLink,
@@ -42,9 +42,9 @@ class User {
 
   static User fromJson(Map<String, dynamic> obj) {
     String uuid = UtilFuncs.getUUID();
-    
-    User user = User(uuid, obj["username"], obj["name"],
-        obj["accountType"], (obj["profilePicLink"] ?? Values.imagePlaceholder), obj["email"]);
+
+    User user = User(uuid, obj["username"], obj["name"], obj["accountType"],
+        (obj["profilePicLink"] ?? Values.imagePlaceholder), obj["email"]);
     // user.email = obj["email"] ? obj["email"] : "None";
     return user;
   }
@@ -60,12 +60,12 @@ class User {
 //   String name = '';
 
 //   String identifier = 'w';
-  
+
 //   String accountType = 'google';
-  
+
 //   @JsonKey(name:"picture")
 //   String profilePicLink = '';
-  
+
 //   @JsonKey(name:"email")
 //   String email = '';
 
@@ -74,7 +74,7 @@ class User {
 
 //   @JsonKey(name:"gender")
 //   String gender = '';
-  
+
 //   @JsonKey(name:"languages")
 //   String languages = '';
 
@@ -83,16 +83,16 @@ class User {
 
 //   @JsonKey(name:"location_priorities")
 //   List<String> locationPriorities = [];
-  
+
 //   @JsonKey(name:"roommate_priorities")
 //   List<String> roommatePriorities = [];
-  
+
 //   @JsonKey(name:"rejected_users")
 //   List<String> rejectedUsers = [];
-  
+
 //   @JsonKey(name:"listed_flats")
 //   List<String> listedFlats = [];
-  
+
 //   String token = '';
 // }
 
@@ -128,10 +128,9 @@ class User {
 //   ];
 //   Flat();
 
-
 //   static User fromJson(Map<String, dynamic> obj) {
 //     String uuid = UtilFuncs.getUUID();
-    
+
 //     User user = User(uuid, obj["username"], obj["name"],
 //         obj["accountType"], (obj["profilePicLink"]!=null?obj["profilePicLink"]:Values.imagePlaceholder), obj["email"]);
 //     // user.email = obj["email"] ? obj["email"] : "None";

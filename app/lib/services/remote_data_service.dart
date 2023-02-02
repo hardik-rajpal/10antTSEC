@@ -6,17 +6,20 @@ import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/utils/helpers.dart';
 import 'package:dio/dio.dart';
+
 class RemoteDataService {
   static Map<String, dynamic> headers = {};
   final dio = Dio();
   late TenantApi client;
-  RemoteDataService(){
+  RemoteDataService() {
     client = TenantApi(dio);
   }
   loginUser(GoogleSignInAccount userDetes, String idToken) {
     Map<String, dynamic> userobj = <String, dynamic>{};
     userobj["uuid"] = UtilFuncs.getUUID();
     userobj["name"] = userDetes.displayName;
+    userobj["username"] = userDetes.email.split('@')[0];
+    userobj["email"] = userDetes.email;
     userobj["identifier"] = userDetes.email;
     userobj["accountType"] = "google";
     userobj["profilePicLink"] = userDetes.photoUrl;
@@ -70,5 +73,9 @@ class RemoteDataService {
 
   addFlat(Flat currReq) {
     return client.postForm(currReq);
+  }
+
+  registerUser(UserDetails details) async {
+    return client.addUserToDB(details);
   }
 }
