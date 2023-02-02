@@ -115,3 +115,27 @@ class ReactionCountButton extends StatelessWidget {
     );
   }
 }
+
+class StatCountButton extends StatelessWidget {
+  final FaIcon icon;
+  final int userCount;
+  const StatCountButton(
+      {super.key, required this.icon, required this.userCount});
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.amber[50])),
+      child: Row(
+        children: [
+          icon,
+          Text(
+            '$userCount',
+            style: const TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+      onPressed: () {},
+    );
+  }
+}
