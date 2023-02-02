@@ -1,12 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ten_ant/components/buttons.dart';
+import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
 import 'package:ten_ant/utils/helpers.dart';
+import 'package:ten_ant/utils/uifuncs.dart';
 
 class FlatFeedPage extends StatefulWidget {
   final UserAuthCubit userCubit;
@@ -18,6 +21,7 @@ class FlatFeedPage extends StatefulWidget {
 
 class _FlatFeedPageState extends State<FlatFeedPage> {
   int groupID = 0;
+  final TextEditingController _feedbackTextController = TextEditingController();
   List<Group> groups = [
     Group(UtilFuncs.getUUID(), 'Me', ['...']),
   ];
@@ -76,11 +80,37 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                       builder: (context) {
                         return SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: FlatViewCard(
-                              data: flat,
-                            ),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: FlatViewCard(
+                                  data: flat,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Styles.likeIcon,
+                                  // Text()
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  RedCrossedButton(
+                                      onPress: () {
+                                        showReviewDialog(context, flat);
+                                      },
+                                      label: 'Dislike'),
+                                  GreenCheckButton(
+                                      onPress: () {
+                                        showReviewDialog(context, flat);
+                                      },
+                                      label: 'Like')
+                                ],
+                              )
+                            ],
                           ),
                         );
                       },
@@ -90,5 +120,13 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
         )
       ]),
     );
+  }
+
+  void showReviewDialog(BuildContext context, Flat flat) {
+    singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
+      RemoteDataService().submitUserFlatInteraction(
+          widget.userCubit.state.user!.uuid, flat.uuid);
+      UIFuncs.toast(context: context, text: 'Review submitted');
+    }, goLabel: 'Submit');
   }
 }

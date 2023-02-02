@@ -37,6 +37,7 @@ class Group {
 }
 
 class Flat {
+  String uuid = '';
   String name = 'Vahra Residency';
   List<String> photos = [
     'https://i.imgur.com/vxP6SFl.png',
@@ -50,5 +51,6 @@ class Flat {
   String address =
       '304, Vahra Residency, Road No. 31, Sri Balaji Nagar Colony, Manikonda, Puppalguda, Hyderabad - 500089';
   String district = 'Panjagutta';
+  List<int> likeDislikeQuestionArray = [3, 2, 1];
   Flat();
 }

@@ -31,4 +31,6 @@ class RemoteDataService {
               Group(UtilFuncs.getUUID(), 'SoBo boys', ['...', '...'])
             ]);
   }
+
+  Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
 }

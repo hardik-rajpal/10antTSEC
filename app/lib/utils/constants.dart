@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainDrawer {
   static const String auth = '/auth';
@@ -13,4 +14,7 @@ class Styles {
     fontSize: 25,
     fontWeight: FontWeight.bold,
   );
+  static const likeIcon = FaIcon(FontAwesomeIcons.check);
+  static const dislikeIcon = FaIcon(FontAwesomeIcons.xmark);
+  static const questionMark = FaIcon(FontAwesomeIcons.question);
 }
