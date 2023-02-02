@@ -14,7 +14,9 @@ class RemoteDataService {
     return User.fromJson(userobj);
   }
 
-  getUserDetails() {}
+  Future<UserDetails> getUserDetails(String userid, User user) async {
+    return UserDetails(user);
+  }
 
   Future<List<Flat>> getFlatFeed(String? uuid) async {
     return Future.delayed(const Duration(milliseconds: 500), () {
@@ -33,4 +35,14 @@ class RemoteDataService {
   }
 
   Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
+
+  Future<List<UserDetails>> getRoomieFeed(String uuid, User usertemp) async {
+    return Future.delayed(Duration(milliseconds: 500), () {
+      return [
+        UserDetails(usertemp),
+        UserDetails(usertemp),
+        UserDetails(usertemp),
+      ];
+    });
+  }
 }

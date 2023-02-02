@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
         authState = event;
         if (event.user != null) {
           // String? userid = event.user?.uuid;
-          Navigator.of(context).pushReplacementNamed(MainDrawer.flatfeed);
+          Navigator.of(context).pushReplacementNamed(MainDrawer.roomiefeed);
         }
       });
     });

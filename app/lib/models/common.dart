@@ -29,7 +29,10 @@ class User {
   }
 }
 
-class UserDetails {}
+class UserDetails {
+  User user;
+  UserDetails(this.user);
+}
 
 class Group {
   String uuid = '';

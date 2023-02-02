@@ -34,8 +34,8 @@ class UserAuthCubit extends Cubit<UserAuthState> {
     emit(UserAuthState(state.localChecked, null));
   }
 
-  Future<UserDetails> getUserDetails() async {
-    //implement local save and restore.
-    return await remoteDB.getUserDetails();
-  }
+  // Future<UserDetails> getUserDetails() async {
+  //implement local save and restore.
+  // return await remoteDB.getUserDetails();
+  // }
 }
