@@ -66,8 +66,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                 onChanged: (choice) {
                   setState(() {
                     if (choice != null) {
-                      groupID = groups
-                          .indexWhere((element) => element.id == choice);
+                      groupID =
+                          groups.indexWhere((element) => element.id == choice);
                     }
                     return;
                   });
@@ -76,7 +76,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
         ),
         Expanded(
           child: CarouselSlider(
-            options: CarouselOptions(height: double.infinity),
+            options: CarouselOptions(
+                height: double.infinity, enableInfiniteScroll: false),
             items: flats
                 .map((flat) => Builder(
                       builder: (context) {

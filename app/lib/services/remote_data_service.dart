@@ -3,6 +3,7 @@ import 'package:ten_ant/api/apiclient.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/api/response/get_group_response.dart';
+import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/utils/helpers.dart';
 import 'package:dio/dio.dart';
@@ -77,5 +78,20 @@ class RemoteDataService {
 
   registerUser(UserDetails details) async {
     return client.addUserToDB(details);
+  }
+
+  Future getLocationTags() async {
+    try {
+      return client.getLocationTags();
+    } catch (e) {
+      Tag t = Tag();
+      t.id = "asdf";
+      t.name = "asdf";
+      return Future.delayed(Duration(milliseconds: 500), () => [t, t, t]);
+    }
+  }
+
+  getRoommateTags() {
+    return client.getRoomieTags();
   }
 }
