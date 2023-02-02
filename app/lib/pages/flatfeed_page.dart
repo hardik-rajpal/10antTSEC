@@ -38,6 +38,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
         setState(() {
           flats = value;
           groups = ingroups;
+          feadLoaded = true;
         });
       });
     });
@@ -50,95 +51,97 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       appBar: AppBar(
         title: const Text('Flat Feed'),
       ),
-      body: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text('Mode: ', style: Styles.textStyle1),
-            DropdownButton<String>(
-                value: groups[groupID].id,
-                icon: const FaIcon(FontAwesomeIcons.arrowDown),
-                items: groups
-                    .map((e) => DropdownMenuItem<String>(
-                        value: e.id,
-                        child: Text(e.name, style: Styles.textStyle1)))
-                    .toList(),
-                onChanged: (choice) {
-                  setState(() {
-                    if (choice != null) {
-                      groupID =
-                          groups.indexWhere((element) => element.id == choice);
-                    }
-                    return;
-                  });
-                })
-          ],
-        ),
-        Expanded(
-          child: CarouselSlider(
-            options: CarouselOptions(
-                height: double.infinity, enableInfiniteScroll: false),
-            items: flats
-                .map((flat) => Builder(
-                      builder: (context) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: FlatViewCard(
-                                  data: flat,
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+      body: (feadLoaded)
+          ? Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text('Mode: ', style: Styles.textStyle1),
+                  DropdownButton<String>(
+                      value: groups[groupID].id,
+                      icon: const FaIcon(FontAwesomeIcons.arrowDown),
+                      items: groups
+                          .map((e) => DropdownMenuItem<String>(
+                              value: e.id,
+                              child: Text(e.name, style: Styles.textStyle1)))
+                          .toList(),
+                      onChanged: (choice) {
+                        setState(() {
+                          if (choice != null) {
+                            groupID = groups
+                                .indexWhere((element) => element.id == choice);
+                          }
+                          return;
+                        });
+                      })
+                ],
+              ),
+              Expanded(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                      height: double.infinity, enableInfiniteScroll: false),
+                  items: flats
+                      .map((flat) => Builder(
+                            builder: (context) {
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
                                   children: [
-                                    ReactionCountButton(
-                                      icon: Styles.likeIcon,
-                                      userList:
-                                          flat.likeDislikeQuestionArray[0],
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: FlatViewCard(
+                                        data: flat,
+                                      ),
                                     ),
-                                    ReactionCountButton(
-                                        icon: Styles.dislikeIcon,
-                                        userList:
-                                            flat.likeDislikeQuestionArray[1]),
-                                    ReactionCountButton(
-                                      icon: Styles.questionMark,
-                                      userList:
-                                          flat.likeDislikeQuestionArray[2],
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ReactionCountButton(
+                                            icon: Styles.likeIcon,
+                                            userList: flat
+                                                .likeDislikeQuestionArray[0],
+                                          ),
+                                          ReactionCountButton(
+                                              icon: Styles.dislikeIcon,
+                                              userList: flat
+                                                  .likeDislikeQuestionArray[1]),
+                                          ReactionCountButton(
+                                            icon: Styles.questionMark,
+                                            userList: flat
+                                                .likeDislikeQuestionArray[2],
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        RedCrossedButton(
+                                            onPress: () {
+                                              showReviewDialog(context, flat);
+                                            },
+                                            label: 'Dislike'),
+                                        GreenCheckButton(
+                                            onPress: () {
+                                              showReviewDialog(context, flat);
+                                            },
+                                            label: 'Like')
+                                      ],
+                                    )
                                   ],
                                 ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  RedCrossedButton(
-                                      onPress: () {
-                                        showReviewDialog(context, flat);
-                                      },
-                                      label: 'Dislike'),
-                                  GreenCheckButton(
-                                      onPress: () {
-                                        showReviewDialog(context, flat);
-                                      },
-                                      label: 'Like')
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ))
-                .toList(),
-          ),
-        )
-      ]),
+                              );
+                            },
+                          ))
+                      .toList(),
+                ),
+              )
+            ])
+          : const CircularProgressIndicator(),
     );
   }
 

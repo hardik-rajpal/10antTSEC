@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
@@ -5,6 +7,7 @@ import 'package:ten_ant/api/response/roomietag.dart';
 import 'package:ten_ant/api/response/roomietag_response.dart';
 import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/services/local_data_service.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
 
@@ -66,6 +69,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       locationPriorityTags.length / 2) {
                     locationPriorities.removeAt(0);
                   }
+                  details.locationPriorities = locationPriorityTags
+                      .where(
+                          (element) => locationPriorities.contains(element.id))
+                      .toList();
                 });
               }))
           .toList(),
@@ -98,9 +105,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     )))
         ],
       ),
-      backgroundColor: locationPriorities.contains(id)
-          ? Colors.primaries[7]
-          : Colors.primaries[5],
+      backgroundColor:
+          selectedList.contains(id) ? Colors.primaries[7] : Colors.primaries[5],
       elevation: 6.0,
       shadowColor: Colors.grey[60],
       padding: const EdgeInsets.all(8.0),
@@ -127,28 +133,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     children: tagtype.options
                         .map((e) =>
                             getChip(e, tagtype.id + e, roommatePriorities, () {
-                              if (!roommatePriorities
-                                  .contains(tagtype.id + e)) {
-                                roommatePriorities.add(tagtype.id + e);
-                              } else {
-                                roommatePriorities.add(tagtype.id + e);
-                              }
-                              if (roommatePriorities
-                                      .where((element) =>
-                                          element.startsWith(tagtype.id))
-                                      .length >
-                                  1) {
-                                String toremove = roommatePriorities.firstWhere(
-                                    (element) =>
-                                        element.startsWith(tagtype.id));
-                                roommatePriorities.remove(toremove);
-                                selected.remove(selected.firstWhere((element) =>
-                                    element.option.startsWith(tagtype.id)));
-                                RoomieTagResponse r = RoomieTagResponse();
-                                r.category = tagtype.options.indexOf(e);
-                                r.option = tagtype.id;
-                                selected.add(r);
-                              }
+                              setState(() {
+                                if (!roommatePriorities
+                                    .contains(tagtype.id + e)) {
+                                  roommatePriorities.add(tagtype.id + e);
+                                  RoomieTagResponse r = RoomieTagResponse();
+                                  r.category = tagtype.options
+                                      .indexWhere((element) => e == element);
+                                  r.option = tagtype.id;
+                                  selected.add(r);
+                                } else {
+                                  roommatePriorities.remove(tagtype.id + e);
+                                  selected.remove(selected.firstWhere(
+                                      (element) =>
+                                          (element.option +
+                                              tagtype
+                                                  .options[element.category]) ==
+                                          (tagtype.id + e)));
+                                }
+                                if (roommatePriorities
+                                        .where((element) =>
+                                            element.startsWith(tagtype.id))
+                                        .length >
+                                    1) {
+                                  String toremove =
+                                      roommatePriorities.firstWhere((element) =>
+                                          element.startsWith(tagtype.id));
+                                  roommatePriorities.remove(toremove);
+                                  selected.remove(selected.firstWhere(
+                                      (element) => element.option
+                                          .startsWith(tagtype.id)));
+                                  RoomieTagResponse r = RoomieTagResponse();
+                                  r.category = tagtype.options.indexOf(e);
+                                  r.option = tagtype.id;
+                                  selected.add(r);
+                                }
+                                details.roommatePriorities = selected;
+                              });
                             }))
                         .toList(),
                   ),
@@ -270,7 +291,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                await RemoteDataService().registerUser(details);
+                                UserDetails newDetails =
+                                    (await RemoteDataService()
+                                        .registerUser(details));
+                                widget.userCubit.userid = newDetails.id!;
+                                widget.userCubit.state.user!.uuid =
+                                    newDetails.id!;
+                                widget.userCubit.setActiveUser(
+                                    widget.userCubit.state.user!);
+                                log('userid: ' + newDetails.id!);
+                                Navigator.of(context)
+                                    .pushReplacementNamed(MainDrawer.flatfeed);
                               }
                             },
                             child: const Text('Submit'),

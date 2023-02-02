@@ -26,7 +26,7 @@ abstract class TenantApi {
   Future<List<Flat>> getFlatFeed(@rt.Body() String? uuid);
 
   @rt.POST('/saveUser')
-  Future<UserDetails> addUserToDB(@rt.Queries() UserDetails details);
+  Future<UserDetails> addUserToDB(@rt.Body() UserDetails details);
 
   @rt.GET('/locationPriorities')
   Future<List<Tag>> getLocationTags();

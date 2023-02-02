@@ -13,6 +13,7 @@ class UserAuthState {
 class UserAuthCubit extends Cubit<UserAuthState> {
   LocalDataService localDB = LocalDataService();
   RemoteDataService remoteDB = RemoteDataService();
+  String userid = '';
   UserAuthCubit() : super(UserAuthState(false, null, false)) {
     getUserFromLocalDB();
   }
