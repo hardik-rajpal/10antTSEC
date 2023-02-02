@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/drawer.dart';
-import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/components/user_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/models/common.dart';
@@ -48,10 +45,9 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
       body: Column(
         children: [
           (cardsLoaded)
-              ? Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
                       SizedBox(
                         height: 550,
                         child: Center(
@@ -64,7 +60,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                             },
                             onStackFinished: () {
                               ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
+                                  .showSnackBar(const SnackBar(
                                 content: Text("Stack Finished"),
                                 duration: Duration(milliseconds: 500),
                               ));
@@ -90,7 +86,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                               label: 'Dislike')
                         ],
                       )
-                    ]))
+                    ])
               : const CircularProgressIndicator(),
         ],
       ),

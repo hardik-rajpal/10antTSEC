@@ -118,31 +118,48 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
           Container(
               padding: const EdgeInsets.only(top: 15),
               child: Column(
-                children: [
-                  MenuItem(
-                    iconData: Icons.house_outlined,
-                    text: 'Flat Feed',
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MainDrawer.flatfeed);
-                    },
-                  ),
-                  MenuItem(
-                    iconData: Icons.person_add_alt_sharp,
-                    text: 'Roomie Feed',
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MainDrawer.roomiefeed);
-                    },
-                  ),
-                  MenuItem(
-                      iconData: Icons.person_2,
-                      text: 'Profile',
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(MainDrawer.profile);
-                      }),
-                ],
+                children: (appMode == tenantMode)
+                    ? [
+                        MenuItem(
+                          iconData: Icons.house_outlined,
+                          text: 'Flat Feed',
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(MainDrawer.flatfeed);
+                          },
+                        ),
+                        MenuItem(
+                          iconData: Icons.person_add_alt_sharp,
+                          text: 'Roomie Feed',
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(MainDrawer.roomiefeed);
+                          },
+                        ),
+                        MenuItem(
+                            iconData: Icons.person_2,
+                            text: 'Profile',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.profile);
+                            }),
+                      ]
+                    : [
+                        MenuItem(
+                            iconData: Icons.maps_home_work_sharp,
+                            text: 'My Offerings',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.myoffering);
+                            }),
+                        MenuItem(
+                            iconData: Icons.person_2,
+                            text: 'Profile',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.profile);
+                            }),
+                      ],
               ))
         ],
       ),

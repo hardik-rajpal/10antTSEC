@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/pages/flatfeed_page.dart';
@@ -12,6 +14,7 @@ void main() {
     MainDrawer.auth: (context) => LoginPage(userCubit: userCubit),
     MainDrawer.flatfeed: (context) => FlatFeedPage(userCubit: userCubit),
     MainDrawer.roomiefeed: (context) => RoomieFeedPage(userCubit: userCubit),
-    MainDrawer.profile: (context) => ProfilePage(userCubit: userCubit)
+    MainDrawer.profile: (context) => ProfilePage(userCubit: userCubit),
+    MainDrawer.myoffering: (context) => ProfilePage(userCubit: userCubit)
   }));
 }

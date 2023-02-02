@@ -6,6 +6,7 @@ class MainDrawer {
   static const String flatfeed = '/flatfeed';
   static const String roomiefeed = '/roomiefeed';
   static const String profile = '/profile';
+  static const String myoffering = '/myoffering';
 }
 
 class Values {

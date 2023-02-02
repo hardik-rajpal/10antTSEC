@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/user_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
