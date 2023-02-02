@@ -5,25 +5,25 @@ part 'add_flat_request.g.dart';
 @JsonSerializable()
 class Flat {
   @JsonKey(name: "id")
-  String id = '';
+  String id = 'a';
 
   @JsonKey(name: "location")
-  String location = '';
+  String location = 'a';
 
   @JsonKey(name: "pictures")
-  List<String> pictures = [];
+  List<String> pictures = ['https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fe%2Fee%2FChain_link_icon.png&imgrefurl=https%3A%2F%2Fsimple.wikipedia.org%2Fwiki%2FLink&tbnid=mj2OmSHS0LnkzM&vet=12ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ..i&docid=Zr3_2orswxTRnM&w=950&h=400&q=image%20link&ved=2ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ'];
 
   @JsonKey(name: "district")
-  String district = '';
+  String district = 'a';
 
   @JsonKey(name: "contact")
-  String contact = '';
+  String contact = 'a';
 
   @JsonKey(name: "description")
-  String description = '';
+  String description = 'a';
 
   @JsonKey(name: "street_address")
-  String street = '';
+  String street = 'a';
 
   @JsonKey(name: "bhk")
   int bhk = 0;
@@ -38,13 +38,14 @@ class Flat {
   int toilets = 0;
 
   @JsonKey(name: "amenities_5km")
-  List<String> amenities = [];
+  List<String> amenities = ['a'];
 
   @JsonKey(name: "tags")
   List<String> features = [];
 
-  List<List<String>> likeDislikeQuestionArray = [];
-
+  List<String> likeArray = [];
+  List<String> dislikeArray = [];
+  
   Flat();
   factory Flat.fromJson(Map<String, dynamic> json) =>
       _$FlatFromJson(json);

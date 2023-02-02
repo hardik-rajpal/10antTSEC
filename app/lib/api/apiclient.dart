@@ -7,25 +7,27 @@ import 'package:ten_ant/api/response/get_group_response.dart';
 
 part 'apiclient.g.dart';
 
-@rt.RestApi(baseUrl: "https://kl.com")
+@rt.RestApi(baseUrl: "http://2e70-103-246-224-250.ngrok.io")
 abstract class TenantApi {
   factory TenantApi(Dio dio, {String baseUrl}) = _TenantApi;
 
-  @rt.POST("/addflat")
+  @rt.POST("/addFlat")
   Future<bool> postForm(@rt.Body() Flat req);
 
   @rt.GET("/getUser")
-  Future<UserDetails> getUserDetails(@rt.Body() String userid);
+  Future<UserDetails> getUserDetails(@rt.Query("id") String userid);
 
-  @rt.GET("/getusergroups")
-  Future<List<Group>> getUserGroups(@rt.Body() String userid);
+  @rt.GET("/getGroupsForUsers")
+  Future<List<Group>> getUserGroups(@rt.Query("id") String userid);
 
-  @rt.GET("/getflatfeed")
-  Future<List<Flat>> getFlatFeed(@rt.Body() String? uuid);
+  @rt.GET("/getFlats")
+  Future<List<Flat>> getFlatFeed(@rt.Query("gid") String gid, @rt.Query("id") String id);
+
+  @rt.GET("/getflatslisted")
+  Future<List<Flat>> getMyFlats(@rt.Query("id") String id);
 
   // @rt.GET("/getflatfeed")
   // Future<void> submitUserFlatInteraction(@rt.Body() String uuid, @rt.Body() String uuid2) {}
-
 
 
 }

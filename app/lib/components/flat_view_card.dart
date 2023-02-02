@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
-import 'package:ten_ant/utils/constants.dart';
 
 class FlatViewCard extends StatefulWidget {
   final Flat data;
@@ -13,25 +12,308 @@ class FlatViewCard extends StatefulWidget {
 class _FlatViewCardState extends State<FlatViewCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.data.street,
-            style: Styles.textStyleHeading,
-          ),
-          ...widget.data.pictures
-              .map((e) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(e),
-                  ))
-              .toList(),
-          Text(
-            'Address: ${widget.data.location}',
-            style: Styles.textStyle1,
-          ),
-        ],
+    // return Card(
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Text(
+    //         widget.data.street,
+    //         style: Styles.textStyleHeading,
+    //       ),
+    //       ...widget.data.pictures
+    //           .map((e) => Padding(
+    //                 padding: const EdgeInsets.all(8.0),
+    //                 child: Image.network(e),
+    //               ))
+    //           .toList(),
+    //       Text(
+    //         'Address: ${widget.data.location}',
+    //         style: Styles.textStyle1,
+    //       ),
+    //     ],
+    //   ),
+    // );
+
+    return Center(
+      child: SingleChildScrollView(
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.red, Colors.deepOrange.shade300],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  stops: const [0.5, 0.9],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      ...widget.data.pictures
+                          .map((e) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(e),
+                              ))
+                          .toList(),
+                      CircleAvatar(
+                        backgroundColor: Colors.red.shade300,
+                        minRadius: 35.0,
+                        child: const Icon(
+                          Icons.message,
+                          size: 30.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // ignore: prefer_const_constructors
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.data.street,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    widget.data.description,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: <Widget>[
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Street Address',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.street,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'District',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.district,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Contact',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.contact,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Description',
+                    style: const TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.description,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'BHK',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.bhk.toString(),
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Rent',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.rent.toString(),
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Area',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.area.toString(),
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  // ignore: prefer_const_constructors
+                  title: Text(
+                    'Toilets',
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.data.toilets.toString(),
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                    // ignore: prefer_const_constructors
+                    title: Text(
+                      'Amenities',
+                      // ignore: prefer_const_constructors
+                      style: TextStyle(
+                        color: Colors.deepOrange,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Column(
+                      children: <Widget>[
+                        Text(widget.data.amenities[0]),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.data.amenities.length,
+                          itemBuilder: (context, index) {
+                            return Text(widget.data.amenities[index]);
+                          },
+                        )
+                      ],
+                    )),
+                    ListTile(
+                    // ignore: prefer_const_constructors
+                    title: Text(
+                      'Features',
+                      // ignore: prefer_const_constructors
+                      style: TextStyle(
+                        color: Colors.deepOrange,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Column(
+                      children: <Widget>[
+                        Text(widget.data.features[0]),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.data.features.length,
+                          itemBuilder: (context, index) {
+                            return Text(widget.data.features[index]);
+                          },
+                        )
+                      ],
+                    )),
+              ],
+            ),
+            // Text(
+            //   widget.data.name,
+            //   style: Styles.textStyle1,
+            // ),
+            // Image(
+            //   width: 200,
+            //   height: 200,
+            //   image: getCachedNetworkImage(widget.data.profilePicLink),
+            // ),
+          ],
+        ),
       ),
     );
   }
