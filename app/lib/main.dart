@@ -1,72 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:ten_ant/landlord/view_flats.dart';
+import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/landlord/view_flats_page.dart';
+import 'package:ten_ant/pages/flatfeed_page.dart';
+import 'package:ten_ant/pages/login_page.dart';
+import 'package:ten_ant/pages/profile_page.dart';
+import 'package:ten_ant/pages/roomiefeed_page.dart';
+import 'package:ten_ant/utils/constants.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-              return ViewFlats();
-            }));
-          },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+  final UserAuthCubit userCubit = UserAuthCubit();
+  runApp(MaterialApp(initialRoute: MainDrawer.auth, routes: {
+    MainDrawer.auth: (context) => LoginPage(userCubit: userCubit),
+    MainDrawer.flatfeed: (context) => FlatFeedPage(userCubit: userCubit),
+    MainDrawer.roomiefeed: (context) => RoomieFeedPage(userCubit: userCubit),
+    MainDrawer.profile: (context) => ProfilePage(userCubit: userCubit),
+    MainDrawer.myoffering: (context) => ViewFlats(userCubit: userCubit)
+  }));
 }

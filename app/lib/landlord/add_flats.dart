@@ -30,10 +30,10 @@ class _AddFlatsState extends State<AddFlats> {
     int length = interests.length;
     for (int i = 0; i < length; i++) {
       w.add(ActionChip(
-        labelPadding: EdgeInsets.all(2.0),
+        labelPadding: const EdgeInsets.all(2.0),
         label: Text(
           interests[i],
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -41,7 +41,7 @@ class _AddFlatsState extends State<AddFlats> {
             selected[i] == 1 ? Colors.primaries[4] : Colors.primaries[3],
         elevation: 6.0,
         shadowColor: Colors.grey[60],
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         onPressed: () {
           setState(() {
             if (selected[i] == 0) {
@@ -69,10 +69,10 @@ class _AddFlatsState extends State<AddFlats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Add Flat")),
+        appBar: AppBar(title: const Text("Add Flat")),
         body: SingleChildScrollView(
             child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
