@@ -6,6 +6,12 @@ class MainDrawer {
   static const String flatfeed = '/flatfeed';
 }
 
+class Values {
+  static const String imagePlaceholder = 'https://i.imgur.com/vxP6SFl.png';
+  static const double opacitySelected = 1;
+  static const double opacityUnselected = 0.2;
+}
+
 class Styles {
   static const TextStyle textStyle1 = TextStyle(
     fontSize: 20,
@@ -14,7 +20,13 @@ class Styles {
     fontSize: 25,
     fontWeight: FontWeight.bold,
   );
-  static const likeIcon = FaIcon(FontAwesomeIcons.check);
-  static const dislikeIcon = FaIcon(FontAwesomeIcons.xmark);
-  static const questionMark = FaIcon(FontAwesomeIcons.question);
+  static FaIcon likeIcon = FaIcon(
+    FontAwesomeIcons.check,
+    color: Colors.green[900],
+  );
+  static const dislikeIcon = FaIcon(FontAwesomeIcons.xmark, color: Colors.red);
+  static const questionMark = FaIcon(
+    FontAwesomeIcons.question,
+    color: Colors.blue,
+  );
 }

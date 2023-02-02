@@ -1,3 +1,5 @@
+import 'package:ten_ant/utils/helpers.dart';
+
 class User {
   String uuid;
   String name;
@@ -51,6 +53,10 @@ class Flat {
   String address =
       '304, Vahra Residency, Road No. 31, Sri Balaji Nagar Colony, Manikonda, Puppalguda, Hyderabad - 500089';
   String district = 'Panjagutta';
-  List<int> likeDislikeQuestionArray = [3, 2, 1];
+  List<List<String>> likeDislikeQuestionArray = [
+    [UtilFuncs.getUUID(), UtilFuncs.getUUID(), UtilFuncs.getUUID()],
+    [UtilFuncs.getUUID(), UtilFuncs.getUUID()],
+    [UtilFuncs.getUUID()]
+  ];
   Flat();
 }

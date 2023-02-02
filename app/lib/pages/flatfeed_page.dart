@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
+import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
@@ -88,11 +89,28 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                   data: flat,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Styles.likeIcon,
-                                  // Text()
-                                ],
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ReactionCountButton(
+                                      icon: Styles.likeIcon,
+                                      userList:
+                                          flat.likeDislikeQuestionArray[0],
+                                    ),
+                                    ReactionCountButton(
+                                        icon: Styles.dislikeIcon,
+                                        userList:
+                                            flat.likeDislikeQuestionArray[1]),
+                                    ReactionCountButton(
+                                      icon: Styles.questionMark,
+                                      userList:
+                                          flat.likeDislikeQuestionArray[2],
+                                    ),
+                                  ],
+                                ),
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -128,5 +146,60 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
           widget.userCubit.state.user!.uuid, flat.uuid);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
+  }
+}
+
+class ReactionCountButton extends StatelessWidget {
+  final FaIcon icon;
+  final List<String> userList;
+  const ReactionCountButton(
+      {super.key, required this.icon, required this.userList});
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.amber[50])),
+      child: Row(
+        children: [
+          icon,
+          Text(
+            '${userList.length}',
+            style: const TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Group Members'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: userList
+                      .map((userdata) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: getCachedNetworkImage(
+                                        Values.imagePlaceholder)),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  userdata,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ))
+                      .toList(),
+                ),
+              );
+            });
+      },
+    );
   }
 }
