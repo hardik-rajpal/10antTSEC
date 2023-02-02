@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ten_ant/landlord/add_flats.dart';
 
 class ViewFlatSpecific extends StatefulWidget {
@@ -11,7 +9,7 @@ class ViewFlatSpecific extends StatefulWidget {
 }
 
 class Data {
-  Map fetched_data = {
+  Map fetchedData = {
     "data": [
       {"id": 1, "name": "Arivallu", "image": "images/sky.jpeg"},
       {"id": 2, "name": "Chennai acclom", "image": "images/sky.jpeg"},
@@ -21,7 +19,7 @@ class Data {
   List _data = [];
 
   Data() {
-    _data = fetched_data["data"];
+    _data = fetchedData["data"];
   }
 
   int getId(int index) {
@@ -42,7 +40,7 @@ class Data {
 }
 
 class _ViewFlatSpecificState extends State<ViewFlatSpecific> {
-  Data _data = new Data();
+  final Data _data = Data();
 
   @override
   Widget build(BuildContext context) {

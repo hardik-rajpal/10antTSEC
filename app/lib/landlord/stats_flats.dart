@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'dart:math';
 
 class StatsFlats extends StatefulWidget {
   const StatsFlats({super.key});
@@ -29,20 +26,20 @@ class _StatsFlatsState extends State<StatsFlats> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(title: Text("Add Flat")),
+            appBar: AppBar(title: const Text("Add Flat")),
             body: Padding(
-                padding: EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(30.0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
+                      SizedBox(
                           height: 20,
                           child: Column(children: [
                             Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [
+                                children: const [
                                   Icon(Icons.check),
                                   Icon(Icons.close),
                                   Icon(Icons.question_mark)
@@ -50,17 +47,17 @@ class _StatsFlatsState extends State<StatsFlats> {
                             Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [
+                                children: const [
                                   Text("12"),
                                   Text("2222"),
                                   Text("e2"),
                                 ])
                           ])),
-                      Container(
+                      SizedBox(
                         height: 10,
                         child: Column(children: [
                           TextField(
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Search ',
                               hintStyle: TextStyle(
                                 fontSize: 14,
@@ -108,7 +105,7 @@ Widget _itemBuilder(BuildContext context, int index) {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: Text("index"),
+            title: const Text("index"),
             onTap: () {},
           ),
         ],
@@ -123,7 +120,7 @@ Widget _itemBuilder(BuildContext context, int index) {
 class Display extends StatelessWidget {
   final String text;
 
-  const Display({required this.text});
+  const Display({super.key, required this.text});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

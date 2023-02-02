@@ -19,13 +19,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     widget.userCubit.stream.listen((event) {
-      setState(() {
-        authState = event;
-        if (event.user != null) {
-          // String? userid = event.user?.uuid;
-          Navigator.of(context).pushReplacementNamed(MainDrawer.roomiefeed);
-        }
-      });
+      if (mounted) {
+        setState(() {
+          authState = event;
+          if (event.user != null) {
+            // String? userid = event.user?.uuid;
+            Navigator.of(context).pushReplacementNamed(MainDrawer.myoffering);
+          }
+        });
+      }
     });
     super.initState();
   }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/utils/constants.dart';

@@ -50,6 +50,25 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
   static const String tenantMode = 'tenantMode';
   String appMode = tenantMode;
   @override
+  void initState() {
+    widget.userCubit.stream.listen((event) {
+      if (mounted) {
+        setState(() {
+          appMode = event.isTenantMode ? tenantMode : landLordMode;
+        });
+      }
+    });
+    appMode = widget.userCubit.state.isTenantMode ? tenantMode : landLordMode;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.userCubit.stream.drain();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
@@ -73,13 +92,17 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
                       Switch(
                           value: (appMode == tenantMode),
                           onChanged: (value) {
-                            setState(() {
-                              if (value) {
-                                appMode = tenantMode;
-                              } else {
-                                appMode = landLordMode;
-                              }
-                            });
+                            if (mounted) {
+                              setState(() {
+                                if (value) {
+                                  appMode = tenantMode;
+                                  widget.userCubit.invertTenantMode();
+                                } else {
+                                  appMode = landLordMode;
+                                  widget.userCubit.invertTenantMode();
+                                }
+                              });
+                            }
                           }),
                       Text(
                         (appMode == tenantMode)

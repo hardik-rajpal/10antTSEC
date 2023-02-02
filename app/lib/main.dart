@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/landlord/view_flats_page.dart';
 import 'package:ten_ant/pages/flatfeed_page.dart';
 import 'package:ten_ant/pages/login_page.dart';
 import 'package:ten_ant/pages/profile_page.dart';
@@ -13,6 +14,6 @@ void main() {
     MainDrawer.flatfeed: (context) => FlatFeedPage(userCubit: userCubit),
     MainDrawer.roomiefeed: (context) => RoomieFeedPage(userCubit: userCubit),
     MainDrawer.profile: (context) => ProfilePage(userCubit: userCubit),
-    MainDrawer.myoffering: (context) => ProfilePage(userCubit: userCubit)
+    MainDrawer.myoffering: (context) => ViewFlats(userCubit: userCubit)
   }));
 }
