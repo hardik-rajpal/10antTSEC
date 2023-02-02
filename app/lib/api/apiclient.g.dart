@@ -13,7 +13,7 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://kl.com';
+    baseUrl ??= 'http://2e70-103-246-224-250.ngrok.io/';
   }
 
   final Dio _dio;
@@ -121,9 +121,9 @@ class _TenantApi implements TenantApi {
   Future<UserDetails> addUserToDB(details) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(details.toJson());
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(details.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<UserDetails>(Options(
       method: 'POST',
@@ -138,6 +138,56 @@ class _TenantApi implements TenantApi {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = UserDetails.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<Tag>> getLocationTags() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Tag>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/locationPriorities',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => Tag.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<RoomieTag>> getRoomieTags() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<RoomieTag>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/roommatePriorities',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => RoomieTag.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

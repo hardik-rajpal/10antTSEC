@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
+import 'package:ten_ant/api/response/roomietag.dart';
+import 'package:ten_ant/api/response/roomietag_response.dart';
+import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
 
+//list of dicts
+/*
+{option:id, category: optionIndex}
+*/
 class EditProfilePage extends StatefulWidget {
   final UserAuthCubit userCubit;
   const EditProfilePage({super.key, required this.userCubit});
@@ -15,55 +22,142 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-
-  final interests = [
-    'writing',
-    'reading',
-    'shows',
-  ];
-  final selected = [0, 0, 0, 0, 0, 0];
-  var number = 0;
+  List<Tag> locationPriorityTags = [];
+  List<String> locationPriorities = [];
+  List<RoomieTagResponse> selected = [];
+  List<String> roommatePriorities = [];
+  List<RoomieTag> roomieTags = [];
   UserDetails details = UserDetails();
-  Widget _buildChips(BuildContext context) {
-    List<Widget> w = [];
-    int length = interests.length;
-    for (int i = 0; i < length; i++) {
-      w.add(ActionChip(
-        labelPadding: const EdgeInsets.all(2.0),
-        label: Text(
-          interests[i],
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor:
-            selected[i] == 1 ? Colors.primaries[4] : Colors.primaries[3],
-        elevation: 6.0,
-        shadowColor: Colors.grey[60],
-        padding: const EdgeInsets.all(8.0),
-        onPressed: () {
-          setState(() {
-            if (selected[i] == 0) {
-              if (number != 3) {
-                number += 1;
-                selected[i] = 1;
-              }
-            } else {
-              selected[i] = 0;
-              number -= 1;
-            }
-          });
-        },
-      ));
-    }
+  String gender = 'Male';
+  @override
+  void initState() {
+    details.username = widget.userCubit.state.user!.username;
+    details.name = widget.userCubit.state.user!.name;
+    details.email = widget.userCubit.state.user!.email;
+    details.age = 18;
+    details.budget = 1000;
+    details.gender = gender;
+    RemoteDataService().getLocationTags().then((value) {
+      setState(() {
+        locationPriorityTags = value;
+      });
+    });
+    RemoteDataService().getRoommateTags().then((value) {
+      setState(() {
+        roomieTags = value;
+      });
+    });
+    super.initState();
+  }
+
+  Widget _buildLocationChips(BuildContext context) {
     return Wrap(
       spacing: 8.0, // gap between adjacent chips
       runSpacing: 4.0,
-      children: w,
+      children: locationPriorityTags
+          .map((e) => getChip(e.name, e.id, locationPriorities, () {
+                setState(() {
+                  if (!locationPriorities.contains(e.id)) {
+                    locationPriorities.add(e.id);
+                  } else {
+                    locationPriorities.remove(e.id);
+                  }
+                  if (locationPriorities.length >
+                      locationPriorityTags.length / 2) {
+                    locationPriorities.removeAt(0);
+                  }
+                });
+              }))
+          .toList(),
     );
   }
 
-  String gender = '';
+  ActionChip getChip(
+      String name, String id, List<String> selectedList, Function onPress) {
+    return ActionChip(
+      labelPadding: const EdgeInsets.all(2.0),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: (selectedList.contains(id)
+                  ? const Icon(
+                      Icons.check,
+                      size: 15,
+                    )
+                  : const Icon(
+                      Icons.cancel,
+                      size: 15,
+                    )))
+        ],
+      ),
+      backgroundColor: locationPriorities.contains(id)
+          ? Colors.primaries[7]
+          : Colors.primaries[5],
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: const EdgeInsets.all(8.0),
+      onPressed: () {
+        onPress();
+      },
+    );
+  }
+
+// /getRoommateSuggestions
+  Widget _buildRoommateChips(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: roomieTags
+          .map((tagtype) => Column(
+                children: [
+                  Text(
+                    tagtype.name,
+                    style: Styles.textStyle1,
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: tagtype.options
+                        .map((e) =>
+                            getChip(e, tagtype.id + e, roommatePriorities, () {
+                              if (!roommatePriorities
+                                  .contains(tagtype.id + e)) {
+                                roommatePriorities.add(tagtype.id + e);
+                              } else {
+                                roommatePriorities.add(tagtype.id + e);
+                              }
+                              if (roommatePriorities
+                                      .where((element) =>
+                                          element.startsWith(tagtype.id))
+                                      .length >
+                                  1) {
+                                String toremove = roommatePriorities.firstWhere(
+                                    (element) =>
+                                        element.startsWith(tagtype.id));
+                                roommatePriorities.remove(toremove);
+                                selected.remove(selected.firstWhere((element) =>
+                                    element.option.startsWith(tagtype.id)));
+                                RoomieTagResponse r = RoomieTagResponse();
+                                r.category = tagtype.options.indexOf(e);
+                                r.option = tagtype.id;
+                                selected.add(r);
+                              }
+                            }))
+                        .toList(),
+                  ),
+                ],
+              ))
+          .toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,6 +225,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             style: Styles.textStyle1,
                           ),
                           DropdownButton<String>(
+                              value: gender,
                               onChanged: (String? choice) {
                                 if (choice != null) {
                                   setState(() {
@@ -141,7 +236,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               },
                               items: ['Male', 'Female', 'Other']
                                   .map((e) => DropdownMenuItem<String>(
-                                      value: 'Male', child: Text(e)))
+                                      value: e, child: Text(e)))
                                   .toList()),
                         ],
                       ),
@@ -157,8 +252,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         },
                       ),
                       Center(
-                          child:
-                              Column(children: <Widget>[_buildChips(context)])),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                            const Text('Location Priorities',
+                                style: Styles.textStyleHeading),
+                            _buildLocationChips(context),
+                            _buildRoommateChips(context)
+                          ])),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[

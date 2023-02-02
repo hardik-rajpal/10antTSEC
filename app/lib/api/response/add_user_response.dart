@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ten_ant/api/response/roomietag_response.dart';
+import 'package:ten_ant/api/response/tag.dart';
 
 part 'add_user_response.g.dart';
 
@@ -9,8 +11,6 @@ class UserDetails {
 
   @JsonKey(name: "name")
   String name = '';
-
-  String identifier = 'w';
 
   String accountType = 'google';
 
@@ -27,16 +27,16 @@ class UserDetails {
   String gender = '';
 
   @JsonKey(name: "languages")
-  String languages = '';
+  List<String> languages = [];
 
   @JsonKey(name: "budget")
   int budget = 1000;
 
   @JsonKey(name: "location_priorities")
-  List<String> locationPriorities = [];
+  List<Tag> locationPriorities = [];
 
   @JsonKey(name: "roommate_priorities")
-  List<String> roommatePriorities = [];
+  List<RoomieTagResponse> roommatePriorities = [];
 
   @JsonKey(name: "rejected_users")
   List<String> rejectedUsers = [];
