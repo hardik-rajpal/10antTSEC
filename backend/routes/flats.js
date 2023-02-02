@@ -14,7 +14,7 @@ router.get('/insertFlat', function(req, res, next) {
     })
 })
 
-router.get('/getFlagTags', function(req, res, next) {
+router.get('/getFlatTags', function(req, res, next) {
     FlatTag.find(function(err, flatTags) {
         if (err) {
             console.log(err);
