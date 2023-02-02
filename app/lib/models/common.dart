@@ -1,3 +1,4 @@
+import 'package:ten_ant/utils/constants.dart';
 import 'package:ten_ant/utils/helpers.dart';
 
 class User {
@@ -22,8 +23,10 @@ class User {
   }
 
   static User fromJson(Map<String, dynamic> obj) {
-    User user = User(obj["uuid"], obj["name"], obj["identifier"],
-        obj["accountType"], obj["profilePicLink"]);
+    String uuid = UtilFuncs.getUUID();
+    
+    User user = User(uuid, obj["name"], obj["identifier"],
+        obj["accountType"], (obj["profilePicLink"]!=null?obj["profilePicLink"]:Values.imagePlaceholder));
     // user.email = obj["email"] ? obj["email"] : "None";
     return user;
   }

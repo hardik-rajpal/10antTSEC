@@ -1,9 +1,16 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ten_ant/api/apiclient.dart';
+import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/utils/helpers.dart';
-
+import 'package:dio/dio.dart';
 class RemoteDataService {
   static Map<String, dynamic> headers = {};
+  final dio = Dio();
+  late TenantApi client;
+  RemoteDataService(){
+    client = TenantApi(dio);
+  }
   loginUser(GoogleSignInAccount userDetes, String idToken) {
     Map<String, dynamic> userobj = <String, dynamic>{};
     userobj["uuid"] = UtilFuncs.getUUID();
@@ -57,5 +64,9 @@ class RemoteDataService {
         const Duration(milliseconds: 500),
         () => FlatStat([10, 20, 5],
             ['Bad neighbourhood', 'High crime rates', 'Low price']));
+  }
+
+  addFlat(AddFlatRequest currReq) {
+    return client.postForm(currReq);
   }
 }

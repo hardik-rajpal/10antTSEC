@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/api/apiclient.dart';
 import 'package:dio/dio.dart';
+import 'package:ten_ant/services/remote_data_service.dart';
 
 class AddFlats extends StatefulWidget {
   const AddFlats({super.key});
@@ -363,7 +364,7 @@ class _AddFlatsState extends State<AddFlats> {
                           ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                var resp = await postForm(currReq);
+                                var resp = await RemoteDataService().addFlat(currReq);
                                 if (resp == "success") {
                                   Navigator.of(context)
                                       .pushNamed("???");
@@ -393,9 +394,3 @@ class _AddFlatsState extends State<AddFlats> {
   }
 }
 
-Future<bool> postForm(AddFlatRequest req) async {
-  final dio = Dio();
-  final client = TenantApi(dio);
-  var comment = await client.postForm(req);
-  return comment;
-}
