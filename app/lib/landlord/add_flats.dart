@@ -66,8 +66,6 @@ class _AddFlatsState extends State<AddFlats> {
     );
   }
 
-  final TextEditingController _locController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -399,6 +397,5 @@ Future<bool> postForm(AddFlatRequest req) async {
   final dio = Dio();
   final client = TenantApi(dio);
   var comment = await client.postForm(req);
-  // comment.result = "success";
   return comment;
 }

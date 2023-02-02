@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart' as rt;
 import 'package:ten_ant/api/request/add_flat_request.dart';
@@ -12,5 +11,6 @@ abstract class TenantApi {
 
   @rt.POST("/addflat")
   Future<bool> postForm(
-      @rt.Body() AddFlatRequest achievementCreateRequest);
+      @rt.Body() AddFlatRequest req);
+
 }
