@@ -45,4 +45,10 @@ class RemoteDataService {
       ];
     });
   }
+
+  Future<List<Flat>> getMyFlats(String uuid) async {
+    return Future.delayed(const Duration(milliseconds: 500), () {
+      return [Flat(), Flat(), Flat()];
+    });
+  }
 }

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/components/drawer.dart';
+import 'package:ten_ant/components/flat_view_card.dart';
+import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/landlord/add_flats.dart';
 import 'package:ten_ant/landlord/stats_flats.dart';
+import 'package:ten_ant/landlord/view_flat_one.dart';
+import 'package:ten_ant/models/common.dart';
+import 'package:ten_ant/services/remote_data_service.dart';
+import 'package:ten_ant/utils/constants.dart';
 
 class ViewFlats extends StatefulWidget {
   final UserAuthCubit userCubit;
@@ -12,39 +18,21 @@ class ViewFlats extends StatefulWidget {
   State<ViewFlats> createState() => _ViewFlatsState();
 }
 
-class Data {
-  Map fetchedData = {
-    "data": [
-      {"id": 1, "name": "Arivallu", "image": "images/sky.jpeg"},
-      {"id": 2, "name": "Chennai acclom", "image": "images/sky.jpeg"},
-      {"id": 3, "name": "myaps", "image": "images/sky.jpeg"}
-    ]
-  };
-  List _data = [];
-
-  Data() {
-    _data = fetchedData["data"];
-  }
-
-  int getId(int index) {
-    return _data[index]["id"];
-  }
-
-  String getName(int index) {
-    return _data[index]["name"];
-  }
-
-  String getImage(int index) {
-    return _data[index]["image"];
-  }
-
-  int getLength() {
-    return _data.length;
-  }
-}
-
 class _ViewFlatsState extends State<ViewFlats> {
-  final Data _data = Data();
+  List<Flat> flats = [];
+  bool flatsLoaded = false;
+  @override
+  void initState() {
+    RemoteDataService()
+        .getMyFlats(widget.userCubit.state.user!.uuid)
+        .then((values) {
+      setState(() {
+        flats = values;
+        flatsLoaded = true;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +40,40 @@ class _ViewFlatsState extends State<ViewFlats> {
       child: Scaffold(
         appBar: AppBar(title: const Text('My Offerings')),
         drawer: MainDrawerWidget(userCubit: widget.userCubit),
-        backgroundColor: Colors.blueGrey,
-        body: ListView.builder(
-          padding: const EdgeInsets.all(5.5),
-          itemCount: _data.getLength(),
-          itemBuilder: _itemBuilder,
-        ),
+        body: (flatsLoaded)
+            ? ListView.builder(itemBuilder: (context, index) {
+                if (index < flats.length) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return ViewSingleFlatPage(
+                            flat: flats[index], userCubit: widget.userCubit);
+                      }));
+                    },
+                    child: Card(
+                        color: Colors.amber[100],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image(
+                              image:
+                                  getCachedNetworkImage(flats[index].photos[0]),
+                              width: 100,
+                              height: 100,
+                            ),
+                            Text(
+                              flats[index].name,
+                              style: Styles.textStyle1,
+                            )
+                          ],
+                        )),
+                  );
+                } else {
+                  return null;
+                }
+              })
+            : const CircularProgressIndicator(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context)
@@ -69,33 +85,6 @@ class _ViewFlatsState extends State<ViewFlats> {
           child: const Icon(Icons.add),
         ),
       ),
-    );
-  }
-
-  Widget _itemBuilder(BuildContext context, int index) {
-    return InkWell(
-      child: Card(
-        margin: const EdgeInsets.all(5),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Image.asset(_data.getImage(index)),
-              title: Text(_data.getName(index)),
-              subtitle: Text(_data.getId(index).toString()),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return const StatsFlats();
-                }));
-              },
-            ),
-          ],
-        ),
-      ),
-      // onTap: () => MaterialPageRoute(
-      //     builder: (context) =>
-      //         SecondRoute(id: _data.getId(index), name: _data.getName(index))),
     );
   }
 }
