@@ -1,0 +1,41 @@
+class User {
+  String uuid;
+  String name;
+  String identifier;
+  String accountType = 'google';
+  String profilePicLink;
+  String email = '';
+  String token = '';
+  bool authenticated = false;
+  User(this.uuid, this.name, this.identifier, this.accountType,
+      this.profilePicLink);
+  Map<String, dynamic> toJson() {
+    return {
+      "uuid": uuid,
+      "name": name,
+      "identifier": identifier,
+      "accountType": accountType,
+      "profilePicLink": profilePicLink,
+    };
+  }
+
+  static User fromJson(Map<String, dynamic> obj) {
+    User user = User(obj["uuid"], obj["name"], obj["identifier"],
+        obj["accountType"], obj["profilePicLink"]);
+    // user.email = obj["email"] ? obj["email"] : "None";
+    return user;
+  }
+}
+
+class UserDetails {}
+
+class Group {
+  String uuid = '';
+  String name = '';
+  List<String> members = [];
+  Group(this.uuid, this.name, this.members);
+}
+
+class Flat {
+  String name = '';
+}
