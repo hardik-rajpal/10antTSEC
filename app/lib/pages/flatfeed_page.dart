@@ -34,7 +34,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     RemoteDataService()
         .getUserGroups(widget.userCubit.state.user!.uuid)
         .then((ingroups) {
-      RemoteDataService().getFlatFeed(ingroups[0].id).then((value) {
+      RemoteDataService().getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid).then((value) {
         setState(() {
           flats = value;
           groups = ingroups;
@@ -87,6 +87,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                 scrollDirection: Axis.vertical,
                                 child: Column(
                                   children: [
+<<<<<<< HEAD
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       child: FlatViewCard(
@@ -132,6 +133,23 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                             label: 'Like')
                                       ],
                                     )
+=======
+                                    ReactionCountButton(
+                                      icon: Styles.likeIcon,
+                                      userList:
+                                          flat.likeArray,
+                                    ),
+                                    ReactionCountButton(
+                                        icon: Styles.dislikeIcon,
+                                        userList:
+                                            flat.dislikeArray),
+                                    // ReactionCountButton(
+                                    //   icon: Styles.questionMark,
+                                    //   userList:
+                                    //       // flat.likeDislikeQuestionArray[2],
+                                    //       ["0"],
+                                    // ),
+>>>>>>> ashwin
                                   ],
                                 ),
                               );

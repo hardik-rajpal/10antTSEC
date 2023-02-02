@@ -41,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            signInWithGoogle(widget.userCubit);
+            RemoteDataService()
+        .getUserDetails("111");
+            // signInWithGoogle(widget.userCubit);
           },
           child: const Text('Sign in with Google'),
         ),

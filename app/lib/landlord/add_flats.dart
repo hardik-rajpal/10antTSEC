@@ -363,6 +363,7 @@ class _AddFlatsState extends State<AddFlats> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 var resp = await RemoteDataService().addFlat(currReq);
+                                // ignore: unrelated_type_equality_checks
                                 if (resp == "success") {
                                   Navigator.of(context)
                                       .pop();

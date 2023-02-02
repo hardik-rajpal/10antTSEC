@@ -13,7 +13,11 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
+<<<<<<< HEAD
     baseUrl ??= 'http://2e70-103-246-224-250.ngrok.io/';
+=======
+    baseUrl ??= 'http://2e70-103-246-224-250.ngrok.io';
+>>>>>>> ashwin
   }
 
   final Dio _dio;
@@ -34,7 +38,7 @@ class _TenantApi implements TenantApi {
     )
         .compose(
           _dio.options,
-          '/addflat',
+          '/addFlat',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -46,9 +50,9 @@ class _TenantApi implements TenantApi {
   @override
   Future<UserDetails> getUserDetails(userid) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'id': userid};
     final _headers = <String, dynamic>{};
-    final _data = userid;
+    final _data = <String, dynamic>{};
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<UserDetails>(Options(
       method: 'GET',
@@ -69,9 +73,9 @@ class _TenantApi implements TenantApi {
   @override
   Future<List<Group>> getUserGroups(userid) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'id': userid};
     final _headers = <String, dynamic>{};
-    final _data = userid;
+    final _data = <String, dynamic>{};
     final _result =
         await _dio.fetch<List<dynamic>>(_setStreamType<List<Group>>(Options(
       method: 'GET',
@@ -80,7 +84,7 @@ class _TenantApi implements TenantApi {
     )
             .compose(
               _dio.options,
-              '/getusergroups',
+              '/getGroupsForUsers',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -92,12 +96,17 @@ class _TenantApi implements TenantApi {
   }
 
   @override
-  Future<List<Flat>> getFlatFeed(uuid) async {
+  Future<List<Flat>> getFlatFeed(
+    gid,
+    id,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{
+      r'gid': gid,
+      r'id': id,
+    };
     final _headers = <String, dynamic>{};
-    final _data = uuid;
+    final _data = <String, dynamic>{};
     final _result =
         await _dio.fetch<List<dynamic>>(_setStreamType<List<Flat>>(Options(
       method: 'GET',
@@ -106,7 +115,32 @@ class _TenantApi implements TenantApi {
     )
             .compose(
               _dio.options,
-              '/getflatfeed',
+              '/getFlats',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => Flat.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<Flat>> getMyFlats(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'id': id};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Flat>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/getflatslisted',
               queryParameters: queryParameters,
               data: _data,
             )

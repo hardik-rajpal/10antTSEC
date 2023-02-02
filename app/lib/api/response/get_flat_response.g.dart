@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'add_flat_request.dart';
+part of 'get_flat_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Flat _$FlatFromJson(Map<String, dynamic> json) => Flat()
+FlatResponse _$FlatResponseFromJson(Map<String, dynamic> json) => FlatResponse()
   ..id = json['id'] as String
   ..location = json['location'] as String
   ..pictures =
@@ -27,7 +27,8 @@ Flat _$FlatFromJson(Map<String, dynamic> json) => Flat()
   ..dislikeArray =
       (json['dislikeArray'] as List<dynamic>).map((e) => e as String).toList();
 
-Map<String, dynamic> _$FlatToJson(Flat instance) => <String, dynamic>{
+Map<String, dynamic> _$FlatResponseToJson(FlatResponse instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'location': instance.location,
       'pictures': instance.pictures,

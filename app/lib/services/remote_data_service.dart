@@ -37,8 +37,8 @@ class RemoteDataService {
     return resp;
   }
 
-  Future<List<Flat>> getFlatFeed(String? uuid) async {
-    final List<Flat> resp = await client.getFlatFeed(uuid);
+  Future<List<Flat>> getFlatFeed(String gid, String uuid) async {
+    final List<Flat> resp = await client.getFlatFeed(gid, uuid);
     return resp;
   }
 
@@ -59,10 +59,9 @@ class RemoteDataService {
     });
   }
 
-  Future<List<Flat>> getMyFlats(String uuid) async {
-    return Future.delayed(const Duration(milliseconds: 500), () {
-      return [Flat(), Flat(), Flat()];
-    });
+  Future<List<Flat>> getMyFlats(String id) async {
+    final List<Flat> resp = await client.getMyFlats(id);
+    return resp;
   }
 
   Future<FlatStat> getFlatStats(String uuid) {
@@ -72,8 +71,9 @@ class RemoteDataService {
             ['Bad neighbourhood', 'High crime rates', 'Low price']));
   }
 
-  addFlat(Flat currReq) {
-    return client.postForm(currReq);
+  Future<bool> addFlat(Flat currReq) async {
+    final resp = await client.postForm(currReq);
+    return resp;
   }
 
   registerUser(UserDetails details) async {
