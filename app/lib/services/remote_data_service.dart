@@ -15,4 +15,20 @@ class RemoteDataService {
   }
 
   getUserDetails() {}
+
+  Future<List<Flat>> getFlatFeed(String? uuid) async {
+    return Future.delayed(const Duration(milliseconds: 500), () {
+      return [Flat(), Flat(), Flat()];
+    });
+  }
+
+  Future<List<Group>> getUserGroups(String userid) {
+    return Future.delayed(
+        const Duration(milliseconds: 500),
+        () => [
+              Group(UtilFuncs.getUUID(), 'Me', ['...']),
+              Group(UtilFuncs.getUUID(), 'Warriors', ['...', '...']),
+              Group(UtilFuncs.getUUID(), 'SoBo boys', ['...', '...'])
+            ]);
+  }
 }

@@ -37,5 +37,18 @@ class Group {
 }
 
 class Flat {
-  String name = '';
+  String name = 'Vahra Residency';
+  List<String> photos = [
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png',
+    'https://i.imgur.com/vxP6SFl.png'
+  ];
+  String address =
+      '304, Vahra Residency, Road No. 31, Sri Balaji Nagar Colony, Manikonda, Puppalguda, Hyderabad - 500089';
+  String district = 'Panjagutta';
+  Flat();
 }
