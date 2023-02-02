@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/user_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
-import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     RemoteDataService()
         .getUserDetails(
-            widget.userCubit.state.user!.uuid, widget.userCubit.state.user!)
+            widget.userCubit.state.user!.uuid)
         .then((value) {
       setState(() {
         details = value;

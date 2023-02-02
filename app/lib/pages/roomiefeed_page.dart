@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:swipe_cards/swipe_cards.dart';
+import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/user_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
-import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 
 class RoomieFeedPage extends StatefulWidget {

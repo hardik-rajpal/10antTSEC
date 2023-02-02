@@ -47,8 +47,8 @@ class LocalDataService {
     List<dynamic>? cachedUsers = userdb.getItem('users');
     cachedUsers ??= [];
     user.token = '';
-    if (!cachedUsers.contains(user.toJson())) {
-      cachedUsers.add(user.toJson());
+    if (!cachedUsers.contains(user.toJson2())) {
+      cachedUsers.add(user.toJson2());
     }
     await userdb.setItem('users', cachedUsers);
     return null;
