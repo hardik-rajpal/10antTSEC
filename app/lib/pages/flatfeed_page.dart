@@ -6,7 +6,6 @@ import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/drawer.dart';
-import 'package:ten_ant/components/flat_view_card.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
@@ -34,7 +33,9 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     RemoteDataService()
         .getUserGroups(widget.userCubit.state.user!.uuid)
         .then((ingroups) {
-      RemoteDataService().getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid).then((value) {
+      RemoteDataService()
+          .getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid)
+          .then((value) {
         setState(() {
           flats = value;
           groups = ingroups;
@@ -87,69 +88,19 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                 scrollDirection: Axis.vertical,
                                 child: Column(
                                   children: [
-<<<<<<< HEAD
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: FlatViewCard(
-                                        data: flat,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ReactionCountButton(
-                                            icon: Styles.likeIcon,
-                                            userList: flat
-                                                .likeDislikeQuestionArray[0],
-                                          ),
-                                          ReactionCountButton(
-                                              icon: Styles.dislikeIcon,
-                                              userList: flat
-                                                  .likeDislikeQuestionArray[1]),
-                                          ReactionCountButton(
-                                            icon: Styles.questionMark,
-                                            userList: flat
-                                                .likeDislikeQuestionArray[2],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        RedCrossedButton(
-                                            onPress: () {
-                                              showReviewDialog(context, flat);
-                                            },
-                                            label: 'Dislike'),
-                                        GreenCheckButton(
-                                            onPress: () {
-                                              showReviewDialog(context, flat);
-                                            },
-                                            label: 'Like')
-                                      ],
-                                    )
-=======
                                     ReactionCountButton(
                                       icon: Styles.likeIcon,
-                                      userList:
-                                          flat.likeArray,
+                                      userList: flat.likeArray,
                                     ),
                                     ReactionCountButton(
                                         icon: Styles.dislikeIcon,
-                                        userList:
-                                            flat.dislikeArray),
+                                        userList: flat.dislikeArray),
                                     // ReactionCountButton(
                                     //   icon: Styles.questionMark,
                                     //   userList:
                                     //       // flat.likeDislikeQuestionArray[2],
                                     //       ["0"],
                                     // ),
->>>>>>> ashwin
                                   ],
                                 ),
                               );

@@ -125,7 +125,7 @@ class _UserViewCardState extends State<UserViewCard> {
                     ),
                   ),
                   subtitle: Text(
-                    details.age,
+                    details.age.toString(),
                     style: const TextStyle(
                       fontSize: 18,
                     ),
@@ -163,7 +163,7 @@ class _UserViewCardState extends State<UserViewCard> {
                     ),
                   ),
                   subtitle: Text(
-                    details.languages,
+                    details.languages.join(', '),
                     // ignore: prefer_const_constructors
                     style: TextStyle(
                       fontSize: 18,
@@ -183,7 +183,7 @@ class _UserViewCardState extends State<UserViewCard> {
                     ),
                   ),
                   subtitle: Text(
-                    details.budget,
+                    details.budget.toString(),
                     // ignore: prefer_const_constructors
                     style: TextStyle(
                       fontSize: 18,
