@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../../../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.tcc": "c",
+			"istream": "c",
+			"ostream": "c",
+			"typeinfo": "c"
+		}
+	}
+}
