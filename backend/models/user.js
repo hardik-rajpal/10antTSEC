@@ -10,7 +10,7 @@ const roommate_priority_schema = new mongoose.Schema({
     category: {type: Number}
 });
 
-const rejected_user_schema = new mongoose.Schema({
+const user_schema = new mongoose.Schema({
     id: {type: mongoose.Schema.Types.ObjectId, ref: "UserSchema"}
 });
 
@@ -29,7 +29,8 @@ const UserSchema = new mongoose.Schema({
     budget: { type: Number, required: true },
     location_priorities: [location_priority_schema],
     roommate_priorities: [roommate_priority_schema],
-    rejected_users: [rejected_user_schema],
+    accepted_users: [user_schema],
+    rejected_users: [user_schema],
     listed_flats: [listed_flat_schema]
   },
   { collection: "users" }
