@@ -1,16 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
-import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
-import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
-import 'package:ten_ant/utils/helpers.dart';
 import 'package:ten_ant/utils/uifuncs.dart';
 
 class FlatFeedPage extends StatefulWidget {
@@ -25,7 +24,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
   int groupID = 0;
   final TextEditingController _feedbackTextController = TextEditingController();
   List<Group> groups = [
-    Group(UtilFuncs.getUUID(), 'Me', ['...']),
+    // Group(UtilFuncs.getUUID(), 'Me', ['...']),
   ];
   List<Flat> flats = [];
   bool feadLoaded = false;
@@ -35,7 +34,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     RemoteDataService()
         .getUserGroups(widget.userCubit.state.user!.uuid)
         .then((ingroups) {
-      RemoteDataService().getFlatFeed(ingroups[0].uuid).then((value) {
+      RemoteDataService().getFlatFeed(ingroups[0].id).then((value) {
         setState(() {
           flats = value;
           groups = ingroups;
@@ -57,18 +56,18 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
           children: [
             const Text('Mode: ', style: Styles.textStyle1),
             DropdownButton<String>(
-                value: groups[groupID].uuid,
+                value: groups[groupID].id,
                 icon: const FaIcon(FontAwesomeIcons.arrowDown),
                 items: groups
                     .map((e) => DropdownMenuItem<String>(
-                        value: e.uuid,
+                        value: e.id,
                         child: Text(e.name, style: Styles.textStyle1)))
                     .toList(),
                 onChanged: (choice) {
                   setState(() {
                     if (choice != null) {
                       groupID = groups
-                          .indexWhere((element) => element.uuid == choice);
+                          .indexWhere((element) => element.id == choice);
                     }
                     return;
                   });
@@ -145,63 +144,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
   void showReviewDialog(BuildContext context, Flat flat) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
       RemoteDataService().submitUserFlatInteraction(
-          widget.userCubit.state.user!.uuid, flat.uuid);
+          widget.userCubit.state.user!.uuid, flat.id);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
-  }
-}
-
-class ReactionCountButton extends StatelessWidget {
-  final FaIcon icon;
-  final List<String> userList;
-  const ReactionCountButton(
-      {super.key, required this.icon, required this.userList});
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.amber[50])),
-      child: Row(
-        children: [
-          icon,
-          Text(
-            '${userList.length}',
-            style: const TextStyle(color: Colors.black),
-          ),
-        ],
-      ),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Group Members'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: userList
-                      .map((userdata) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: getCachedNetworkImage(
-                                        Values.imagePlaceholder)),
-                              ),
-                              Flexible(
-                                child: Text(
-                                  userdata,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ))
-                      .toList(),
-                ),
-              );
-            });
-      },
-    );
   }
 }

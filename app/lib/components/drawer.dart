@@ -50,6 +50,25 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
   static const String tenantMode = 'tenantMode';
   String appMode = tenantMode;
   @override
+  void initState() {
+    widget.userCubit.stream.listen((event) {
+      if (mounted) {
+        setState(() {
+          appMode = event.isTenantMode ? tenantMode : landLordMode;
+        });
+      }
+    });
+    appMode = widget.userCubit.state.isTenantMode ? tenantMode : landLordMode;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.userCubit.stream.drain();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
@@ -73,13 +92,17 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
                       Switch(
                           value: (appMode == tenantMode),
                           onChanged: (value) {
-                            setState(() {
-                              if (value) {
-                                appMode = tenantMode;
-                              } else {
-                                appMode = landLordMode;
-                              }
-                            });
+                            if (mounted) {
+                              setState(() {
+                                if (value) {
+                                  appMode = tenantMode;
+                                  widget.userCubit.invertTenantMode();
+                                } else {
+                                  appMode = landLordMode;
+                                  widget.userCubit.invertTenantMode();
+                                }
+                              });
+                            }
                           }),
                       Text(
                         (appMode == tenantMode)
@@ -118,31 +141,48 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
           Container(
               padding: const EdgeInsets.only(top: 15),
               child: Column(
-                children: [
-                  MenuItem(
-                    iconData: Icons.house_outlined,
-                    text: 'Flat Feed',
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MainDrawer.flatfeed);
-                    },
-                  ),
-                  MenuItem(
-                    iconData: Icons.person_add_alt_sharp,
-                    text: 'Roomie Feed',
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MainDrawer.roomiefeed);
-                    },
-                  ),
-                  MenuItem(
-                      iconData: Icons.person_2,
-                      text: 'Profile',
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(MainDrawer.profile);
-                      }),
-                ],
+                children: (appMode == tenantMode)
+                    ? [
+                        MenuItem(
+                          iconData: Icons.house_outlined,
+                          text: 'Flat Feed',
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(MainDrawer.flatfeed);
+                          },
+                        ),
+                        MenuItem(
+                          iconData: Icons.person_add_alt_sharp,
+                          text: 'Roomie Feed',
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(MainDrawer.roomiefeed);
+                          },
+                        ),
+                        MenuItem(
+                            iconData: Icons.person_2,
+                            text: 'Profile',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.profile);
+                            }),
+                      ]
+                    : [
+                        MenuItem(
+                            iconData: Icons.maps_home_work_sharp,
+                            text: 'My Offerings',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.myoffering);
+                            }),
+                        MenuItem(
+                            iconData: Icons.person_2,
+                            text: 'Profile',
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(MainDrawer.profile);
+                            }),
+                      ],
               ))
         ],
       ),

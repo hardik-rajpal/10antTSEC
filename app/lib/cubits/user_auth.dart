@@ -6,13 +6,14 @@ import 'package:ten_ant/services/remote_data_service.dart';
 class UserAuthState {
   bool localChecked = false;
   User? user;
-  UserAuthState(this.localChecked, this.user);
+  bool isTenantMode = false;
+  UserAuthState(this.localChecked, this.user, this.isTenantMode);
 }
 
 class UserAuthCubit extends Cubit<UserAuthState> {
   LocalDataService localDB = LocalDataService();
   RemoteDataService remoteDB = RemoteDataService();
-  UserAuthCubit() : super(UserAuthState(false, null)) {
+  UserAuthCubit() : super(UserAuthState(false, null, false)) {
     getUserFromLocalDB();
   }
   getUserFromLocalDB() async {
@@ -20,22 +21,25 @@ class UserAuthCubit extends Cubit<UserAuthState> {
     if (user != null) {
       RemoteDataService.headers["usertoken"] = user.token;
     }
-    emit(UserAuthState(true, user));
+    emit(UserAuthState(true, user, false));
   }
 
   setActiveUser(User user) async {
     await localDB.saveAuthenticatedUser(user);
     RemoteDataService.headers["usertoken"] = user.token;
-    emit(UserAuthState(state.localChecked, user));
+    emit(UserAuthState(state.localChecked, user, state.isTenantMode));
   }
 
   removeUser() async {
     await localDB.unauthenticateUser();
-    emit(UserAuthState(state.localChecked, null));
+    emit(UserAuthState(state.localChecked, null, state.isTenantMode));
   }
 
-  Future<UserDetails> getUserDetails() async {
-    //implement local save and restore.
-    return await remoteDB.getUserDetails();
+  invertTenantMode() async {
+    emit(UserAuthState(state.localChecked, state.user, !state.isTenantMode));
   }
+  // Future<UserDetails> getUserDetails() async {
+  //implement local save and restore.
+  // return await remoteDB.getUserDetails();
+  // }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ten_ant/models/common.dart';
+import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/utils/constants.dart';
 
 class FlatViewCard extends StatefulWidget {
@@ -18,17 +18,17 @@ class _FlatViewCardState extends State<FlatViewCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.data.name,
+            widget.data.street,
             style: Styles.textStyleHeading,
           ),
-          ...widget.data.photos
+          ...widget.data.pictures
               .map((e) => Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network(e),
                   ))
               .toList(),
           Text(
-            'Address: ${widget.data.address}',
+            'Address: ${widget.data.location}',
             style: Styles.textStyle1,
           ),
         ],
