@@ -13,11 +13,7 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
-<<<<<<< HEAD
-    baseUrl ??= 'http://bd29-103-246-224-250.ngrok.io/';
-=======
     baseUrl ??= 'http://bd29-103-246-224-250.ngrok.io';
->>>>>>> 42e70868d8c1b7c519e0aaef3a9c11fefc463be5
   }
 
   final Dio _dio;
@@ -282,11 +278,7 @@ class _TenantApi implements TenantApi {
   }
 
   @override
-<<<<<<< HEAD
-  Future<dynamic> roomieFeedback(
-=======
   Future<void> roomieFeedback(
->>>>>>> 42e70868d8c1b7c519e0aaef3a9c11fefc463be5
     id,
     tid,
     score,
@@ -299,32 +291,19 @@ class _TenantApi implements TenantApi {
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-<<<<<<< HEAD
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-=======
     await _dio.fetch<void>(_setStreamType<void>(Options(
->>>>>>> 42e70868d8c1b7c519e0aaef3a9c11fefc463be5
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-<<<<<<< HEAD
-          '/roommateFeedback',
-=======
           '/roomieFeedback',
->>>>>>> 42e70868d8c1b7c519e0aaef3a9c11fefc463be5
           queryParameters: queryParameters,
           data: _data,
         )
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-<<<<<<< HEAD
-    final value = _result.data;
-    return value;
-=======
     return null;
->>>>>>> 42e70868d8c1b7c519e0aaef3a9c11fefc463be5
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

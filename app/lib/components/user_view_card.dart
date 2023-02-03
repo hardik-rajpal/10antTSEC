@@ -71,6 +71,7 @@ class _UserViewCardState extends State<UserViewCard> {
   Widget _buildLocationChips(BuildContext context) {
     List<String> locprilist =
         widget.details.locationPriorities.map((e) => e.id).toList();
+    // List<String> usertaglist = widget.details.roommatePriorities.;
     return Wrap(
       spacing: 8.0, // gap between adjacent chips
       runSpacing: 4.0,
