@@ -127,22 +127,26 @@ router.post('/registerFeedback', function(req, res, next){
 })
 
 router.post('/roomieFeedback', async function(req, res, next) {
-  const this_id = req.body.id;
-  const other_id = req.body.tid;
-  const score = req.body.score;
+  const this_id = req.query.id;
+  const other_id = req.query.tid;
+  const score = req.query.score;
   try {var this_user = await User.findById(this_id);} catch (err) {console.log(err); res.status(500).send(); return;}
+  console.log(this_user.username);
   if (score == -1) {
-    rejected_list = this_user.rejected_users;
+    var rejected_list = this_user.rejected_users;
     rejected_list.push({id: other_id});
+    console.log(rejected_list);
     try {await User.findOneAndUpdate({_id: this_id}, {$set: {rejected_users: rejected_list}})} catch (err) {console.log(err);}
   } else if (score == 1) {
-    accepted_list = this_user.accepted_users;
+    var accepted_list = this_user.accepted_users;
     accepted_list.push({id: other_id});
-    try {await User.findOneAndUpdate({_id: this_id}, {$set: {rejected_users: rejected_list}})} catch (err) {console.log(err);}
+    console.log(accepted_list);
+    try {await User.findOneAndUpdate({_id: this_id}, {$set: {accepted_users: accepted_list}})} catch (err) {console.log(err);}
     try {var other_user = await User.findById(other_id);} catch (err) {console.log(err);}
-    other_user_accepted = new Set(other_user.accepted_users.map((obj) => obj.id));
+    var other_user_accepted = new Set(other_user.accepted_users.map((obj) => obj.id.toString()));
+    console.log(other_user_accepted)
     if (other_user_accepted.has(this_id)) {
-      group_new = new Group({
+      var group_new = new Group({
         users: [{id: this_id}, {id: other_id}],
         name: this_user.username + " " + other_user.username,
         city: 'Mumbai'
@@ -152,6 +156,7 @@ router.post('/roomieFeedback', async function(req, res, next) {
       })
     }
   }
+  res.send({});
 })
 
 router.post('/deleteFeedback', function(req, res, next) {
@@ -233,7 +238,7 @@ router.get('/getFlats', async function(req, res, next) {
           }
         }
         var group_flat_fora = []
-        try {group_flat_fora = await GroupFlatForum.find({$and: [{flat: flats[i].id}, {group: req.query.gid}]})}
+        try {group_flat_fora = await GroupFlatForum.find({$and: [{flat: flats[i].id}, {group: req.query.gid}]}).sort({'_id': 1})}
         catch (err) {console.log(err);}
         if (!group_flat_fora) {group_flat_fora = []}
         else {group_flat_fora = group_flat_fora.map(obj => {return {'message': obj.message, 'sender': id_username_dict[obj.sender], 'timestamp': 0}})}
@@ -283,9 +288,20 @@ router.get('/getRoommateSuggestions', async function(req, res, next){
   for (let i=0; i<all_ids.length; ++i) {
     var query_user = {};
     try {query_user = await User.findById(all_ids[i])} catch (err) {console.log(err);}
-    query_user.id = query_user._id.toString();
-    userData.push(query_user);
-    score = 0;
+    userData.push({
+      languages: query_user.languages,
+      id: query_user._id.toString(),
+      location_priorities: query_user.location_priorities,
+      roommate_priorities: query_user.roommate_priorities,
+      username: query_user.username,
+      name: query_user.name,
+      email: query_user.email,
+      age: query_user.age,
+      gender: query_user.gender,
+      budget: query_user.budget,
+      picture: query_user.picture
+    });
+    var score = 0;
     for (roommate_priority of thisUserData.roommate_priorities) {
       for (option_priority of query_user.roommate_priorities) {
         if (roommate_priority.option.toString() == option_priority.option.toString()) {
@@ -298,6 +314,7 @@ router.get('/getRoommateSuggestions', async function(req, res, next){
   var argsorted = [...Array(userData.length).keys()];
   argsorted.sort((b, a) => scores[a] - scores[b]);
   result = argsorted.map((id) => userData[id]);
+  console.log(result);
   res.send(result);
 });
 
@@ -528,10 +545,10 @@ router.post('/addFlat', async function(req, res) {
 
 router.post('/postMessage', async function(req, res) {
   var group_flat_msg = new GroupFlatForum({
-    flat: req.body.flat,
-    group: req.body.group,
-    message: req.body.message,
-    sender: req.body.sender
+    flat: req.query.flat,
+    group: req.query.group,
+    message: req.query.message,
+    sender: req.query.sender
   })
 
   group_flat_msg.save(function (err, res) {
