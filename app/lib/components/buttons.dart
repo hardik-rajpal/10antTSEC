@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ten_ant/api/mini_user.dart';
 import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/utils/constants.dart';
 
@@ -63,7 +64,7 @@ class RedCrossedButton extends StatelessWidget {
 
 class ReactionCountButton extends StatelessWidget {
   final FaIcon icon;
-  final List<String> userList;
+  final List<MiniUser> userList;
   const ReactionCountButton(
       {super.key, required this.icon, required this.userList});
   @override
@@ -97,11 +98,11 @@ class ReactionCountButton extends StatelessWidget {
                                 child: CircleAvatar(
                                     radius: 30,
                                     backgroundImage: getCachedNetworkImage(
-                                        Values.imagePlaceholder)),
+                                        userdata.picture)),
                               ),
                               Flexible(
                                 child: Text(
-                                  userdata,
+                                  userdata.username,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),

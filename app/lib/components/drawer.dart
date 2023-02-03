@@ -122,7 +122,7 @@ class MainDrawerWidgetState extends State<MainDrawerWidget> {
                       decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                           image: DecorationImage(
-                              image: NetworkImage(Values.imagePlaceholder))),
+                              image: AssetImage('images/10ant2.png'))),
                     ),
                     const Text('10ANT',
                         style: TextStyle(

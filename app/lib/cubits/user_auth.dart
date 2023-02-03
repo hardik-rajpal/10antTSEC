@@ -6,14 +6,15 @@ import 'package:ten_ant/services/remote_data_service.dart';
 class UserAuthState {
   bool localChecked = false;
   User? user;
-  bool isTenantMode = false;
+  bool isTenantMode = true;
   UserAuthState(this.localChecked, this.user, this.isTenantMode);
 }
 
 class UserAuthCubit extends Cubit<UserAuthState> {
   LocalDataService localDB = LocalDataService();
   RemoteDataService remoteDB = RemoteDataService();
-  UserAuthCubit() : super(UserAuthState(false, null, false)) {
+  String userid = '';
+  UserAuthCubit() : super(UserAuthState(false, null, true)) {
     getUserFromLocalDB();
   }
   getUserFromLocalDB() async {
@@ -21,11 +22,11 @@ class UserAuthCubit extends Cubit<UserAuthState> {
     if (user != null) {
       RemoteDataService.headers["usertoken"] = user.token;
     }
-    emit(UserAuthState(true, user, false));
+    emit(UserAuthState(true, user, true));
   }
 
   setActiveUser(User user) async {
-    await localDB.saveAuthenticatedUser(user);
+    // await localDB.saveAuthenticatedUser(user);
     RemoteDataService.headers["usertoken"] = user.token;
     emit(UserAuthState(state.localChecked, user, state.isTenantMode));
   }

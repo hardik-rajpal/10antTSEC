@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ten_ant/api/apiclient.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
@@ -28,6 +30,7 @@ class RemoteDataService {
   }
 
   Future<UserDetails> getUserDetails(String uuid) async {
+    log('uuid sent for details$uuid');
     final UserDetails resp = await client.getUserDetails(uuid);
     return resp;
   }
@@ -37,8 +40,9 @@ class RemoteDataService {
     return resp;
   }
 
-  Future<List<Flat>> getFlatFeed(String? uuid) async {
-    final List<Flat> resp = await client.getFlatFeed(uuid);
+  Future<List<Flat>> getFlatFeed(String gid, String uuid) async {
+    log('$gid, and $uuid');
+    final List<Flat> resp = await client.getFlatFeed(gid, uuid);
     return resp;
   }
 
@@ -47,22 +51,22 @@ class RemoteDataService {
     return resp;
   }
 
-  Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
-
-  Future<List<UserDetails>> getRoomieFeed(String uuid, User usertemp) async {
-    return Future.delayed(const Duration(milliseconds: 500), () {
-      return [
-        UserDetails(),
-        UserDetails(),
-        UserDetails(),
-      ];
-    });
+  Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {
+    // await client.submitUserFlatInteraction(uuid, uuid2);
   }
 
-  Future<List<Flat>> getMyFlats(String uuid) async {
-    return Future.delayed(const Duration(milliseconds: 500), () {
-      return [Flat(), Flat(), Flat()];
-    });
+  Future<void> registerFeedback(String user_id, String flat_id, String feedback, String score) async {
+    await client.registerFeedback(user_id, flat_id, feedback, score);
+  }
+
+  Future<List<UserDetails>> getRoomieFeed(String uuid) async {
+    final List<UserDetails> resp = await client.getRoomieFeed(uuid);
+    return resp;
+  }
+
+  Future<List<Flat>> getMyFlats(String id) async {
+    final List<Flat> resp = await client.getMyFlats(id);
+    return resp;
   }
 
   Future<FlatStat> getFlatStats(String uuid) {
@@ -72,8 +76,9 @@ class RemoteDataService {
             ['Bad neighbourhood', 'High crime rates', 'Low price']));
   }
 
-  addFlat(Flat currReq) {
-    return client.postForm(currReq);
+  Future<bool> addFlat(Flat currReq) async {
+    final resp = await client.postForm(currReq);
+    return resp;
   }
 
   registerUser(UserDetails details) async {
@@ -87,11 +92,15 @@ class RemoteDataService {
       Tag t = Tag();
       t.id = "asdf";
       t.name = "asdf";
-      return Future.delayed(Duration(milliseconds: 500), () => [t, t, t]);
+      return Future.delayed(const Duration(milliseconds: 500), () => [t, t, t]);
     }
   }
 
   getRoommateTags() {
     return client.getRoomieTags();
+  }
+
+  Future<void> roomieFeedback(String id, String tid, int score) async {
+    await client.roomieFeedback(id, tid, score);
   }
 }

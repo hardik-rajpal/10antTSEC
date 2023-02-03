@@ -7,9 +7,9 @@ part of 'add_user_response.dart';
 // **************************************************************************
 
 UserDetails _$UserDetailsFromJson(Map<String, dynamic> json) => UserDetails()
+  ..id = json['id'] as String?
   ..username = json['username'] as String
   ..name = json['name'] as String
-  ..accountType = json['accountType'] as String
   ..profilePicLink = json['picture'] as String
   ..email = json['email'] as String
   ..age = json['age'] as int
@@ -22,18 +22,13 @@ UserDetails _$UserDetailsFromJson(Map<String, dynamic> json) => UserDetails()
       .toList()
   ..roommatePriorities = (json['roommate_priorities'] as List<dynamic>)
       .map((e) => RoomieTagResponse.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..rejectedUsers =
-      (json['rejected_users'] as List<dynamic>).map((e) => e as String).toList()
-  ..listedFlats =
-      (json['listed_flats'] as List<dynamic>).map((e) => e as String).toList()
-  ..token = json['token'] as String;
+      .toList();
 
 Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'username': instance.username,
       'name': instance.name,
-      'accountType': instance.accountType,
       'picture': instance.profilePicLink,
       'email': instance.email,
       'age': instance.age,
@@ -42,7 +37,4 @@ Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
       'budget': instance.budget,
       'location_priorities': instance.locationPriorities,
       'roommate_priorities': instance.roommatePriorities,
-      'rejected_users': instance.rejectedUsers,
-      'listed_flats': instance.listedFlats,
-      'token': instance.token,
     };

@@ -30,7 +30,7 @@ class LocalDataService {
         cachedUsers.where((element) => element["uuid"] == uuid).toList();
     if (matches.isNotEmpty) {
       User user = User.fromJson(matches[0]);
-      user.token = useridtoken.split('_')[1];
+      user.token = useridtoken;
       return user;
     } else {
       // log(matches.toString());
@@ -42,7 +42,7 @@ class LocalDataService {
 
   saveAuthenticatedUser(User user) async {
     await userdb.ready;
-    await userdb.setItem('useridtoken', '${user.uuid}_${user.token}');
+    await userdb.setItem('useridtoken', user.uuid);
     log('set useridtoken as: ${user.token}');
     List<dynamic>? cachedUsers = userdb.getItem('users');
     cachedUsers ??= [];
@@ -57,5 +57,10 @@ class LocalDataService {
   unauthenticateUser() async {
     await userdb.ready;
     await userdb.deleteItem('useridtoken');
+  }
+
+  Future<String?> getUserIDToken() async {
+    await userdb.ready;
+    return userdb.getItem('useridtoken');
   }
 }
