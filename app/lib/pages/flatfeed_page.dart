@@ -159,8 +159,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
 
   void showReviewDialog(BuildContext context, Flat flat) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
-      RemoteDataService().registerFeedback(
-          widget.userCubit.state.user!.uuid, flat.id, _feedbackTextController.text, 1);
+      RemoteDataService().registerFeedback(widget.userCubit.state.user!.uuid,
+          flat.id, _feedbackTextController.text, 1);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
   }
@@ -189,7 +189,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     });
   }
 
-  _buildForum(String id, String id2, String userIDToken, List<ForumMsg> forum) {
+  _buildForum(
+      String flatid, String groupid, String userIDToken, List<ForumMsg> forum) {
     return Column(children: [
       ...forum
           .map((e) => Card(
@@ -220,7 +221,11 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
               ),
             ),
             IconButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  RemoteDataService().postMessage(
+                      flatid, groupid, _mainTextController.text, userIDToken);
+                  _mainTextController.clear();
+                },
                 icon: const FaIcon(
                   FontAwesomeIcons.paperPlane,
                 ))
