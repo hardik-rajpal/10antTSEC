@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
@@ -20,6 +22,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
   List<SwipeItem> swipeCards = [];
   late MatchEngine _matchEngine;
   bool cardsLoaded = false;
+  // ignore: non_constant_identifier_names
   int curr_index = 0;
   List<Tag> locationPrioritTags = [];
 
@@ -33,22 +36,24 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
             .map((userDetail) => SwipeItem(
                 content: userDetail,
                 likeAction: () async {
-                  await RemoteDataService().roomieFeedback(
-                      widget.userCubit.state.user!.token,
-                      swipeCards[curr_index].content.id,
-                      1);
-                  setState(() {
-                    curr_index++;
-                  });
+                  // UserDetails us = (swipeCards[curr_index].content as UserDetails);
+                  // String s = us.id!;
+                  // await RemoteDataService().roomieFeedback(
+                  //     widget.userCubit.state.user!.token,
+                  //     s,
+                  //     1);
+                  // setState(() {
+                  //   curr_index++;
+                  // });
                 },
                 nopeAction: () async {
-                  await RemoteDataService().roomieFeedback(
-                      widget.userCubit.state.user!.token,
-                      swipeCards[curr_index].content.id,
-                      -1);
-                  setState(() {
-                    curr_index++;
-                  });
+                  // await RemoteDataService().roomieFeedback(
+                  //     widget.userCubit.state.user!.token,
+                  //     swipeCards[curr_index].content.id,
+                  //     -1);
+                  // setState(() {
+                  //   curr_index++;
+                  // });
                 }))
             .toList();
         _matchEngine = MatchEngine(swipeItems: swipeCards);
@@ -102,9 +107,8 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                                     widget.userCubit.state.user!.token,
                                     swipeCards[curr_index].content.id,
                                     1);
-                                setState(() {
                                   curr_index++;
-                                });
+                                  log('curr_index:' + curr_index.toString());
                               },
                               label: 'Like'),
                           RedCrossedButton(
@@ -114,9 +118,8 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                                     widget.userCubit.state.user!.token,
                                     swipeCards[curr_index].content.id,
                                     -1);
-                                setState(() {
                                   curr_index++;
-                                });
+                                  log('curr_index:' + curr_index.toString());
                               },
                               label: 'Dislike')
                         ],

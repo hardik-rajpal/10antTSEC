@@ -61,7 +61,7 @@ async function updateTop10Flats(group_id, top10flat, rejected, all_usrs) {
   }
   console.log(top10flat);
   console.log(scores);
-  Group.findOneAndUpdate({'id': group_id}, {$set: {top10flat: top10flat}}, function(err, group) {
+  Group.findOneAndUpdate({_id: group_id}, {$set: {top10flat: top10flat}}, function(err, group) {
     if (err) {
       console.log(err);
       group.status(500).send();
@@ -76,10 +76,10 @@ router.get('/', function(req, res, next) {
 
 router.post('/registerFeedback', function(req, res, next){
   const feedback = new UserFlatFeedback({
-    user_id: req.body.user_id,
-    flat_id: req.body.flat_id,
-    feedback: req.body.feedback,
-    score: req.body.score
+    user_id: req.query.user_id,
+    flat_id: req.query.flat_id,
+    feedback: req.query.feedback,
+    score: req.query.score
   })
   feedback.save(function(err, user) {
     if (err) {
@@ -99,21 +99,21 @@ router.post('/registerFeedback', function(req, res, next){
           for (var i=0; i<all_usrs.length; i++) {
             var flat_feedback;
             try {
-              flat_feedback = await UserFlatFeedback.findOne({$and: [{user_id: all_usrs[i].id}, {flat_id: req.body.flat_id}]});
+              flat_feedback = await UserFlatFeedback.findOne({$and: [{user_id: all_usrs[i].id}, {flat_id: req.query.flat_id}]});
             } catch (err) {}
             if (flat_feedback.score == -1) {
               rejects += 1;
               if (rejects*2 > all_usrs.length) {
-                idx = top10flat.indexOf({id: res.body.flat_id});
+                idx = top10flat.indexOf({id: res.query.flat_id});
                 top10flat.splice(idx, 1);
-                rejected.push({id: res.body.flat_id});
-                Group.findOneAndUpdate({'id': grp_id}, {$set: {top10flat: top10flat, rejected: rejected}}, function(err, group) {
+                rejected.push({id: res.query.flat_id});
+                Group.findOneAndUpdate({'id': grp_id}, {$set: {top10flat: top10flat, rejected: rejected}}, async function(err, group) {
                   if (err) {
                     console.log(err);
                     group.status(500).send();
                     return;
                   } else {
-                    updateTop10Flats(grp_id, top10flat, rejected, all_usrs);
+                    try {await updateTop10Flats(grp_id, top10flat, rejected, all_usrs);} catch (err) {console.log(err);}
                   }
                 })
                 break;
@@ -124,6 +124,34 @@ router.post('/registerFeedback', function(req, res, next){
       })
     }
   })
+})
+
+router.post('/roomieFeedback', async function(req, res, next) {
+  const this_id = req.body.id;
+  const other_id = req.body.tid;
+  const score = req.body.score;
+  try {var this_user = await User.findById(this_id);} catch (err) {console.log(err); res.status(500).send(); return;}
+  if (score == -1) {
+    rejected_list = this_user.rejected_users;
+    rejected_list.push({id: other_id});
+    try {await User.findOneAndUpdate({_id: this_id}, {$set: {rejected_users: rejected_list}})} catch (err) {console.log(err);}
+  } else if (score == 1) {
+    accepted_list = this_user.accepted_users;
+    accepted_list.push({id: other_id});
+    try {await User.findOneAndUpdate({_id: this_id}, {$set: {rejected_users: rejected_list}})} catch (err) {console.log(err);}
+    try {var other_user = await User.findById(other_id);} catch (err) {console.log(err);}
+    other_user_accepted = new Set(other_user.accepted_users.map((obj) => obj.id));
+    if (other_user_accepted.has(this_id)) {
+      group_new = new Group({
+        users: [{id: this_id}, {id: other_id}],
+        name: this_user.username + " " + other_user.username,
+        city: 'Mumbai'
+      })
+      group_new.save(function(err, res) {
+        if (err) {console.log(err);} else {}
+      })
+    }
+  }
 })
 
 router.post('/deleteFeedback', function(req, res, next) {
@@ -139,6 +167,12 @@ router.post('/deleteFeedback', function(req, res, next) {
 router.get('/getFlats', async function(req, res, next) {
   const grp_id = req.query.gid;
   const usr_id = req.query.id;
+  var all_tags = [];
+  try {all_tags = await FlatTag.find()} catch (err) {console.log(err);}
+  tag_id_name_map = []
+  for (tag of all_tags) {
+    tag_id_name_map[tag._id.toString()] = tag.name
+  }
 
   var my_usr = {}
   try {my_usr = await User.findById(usr_id);} catch (err) {console.log(err); res.status(500).send(); return;}
@@ -153,7 +187,7 @@ router.get('/getFlats', async function(req, res, next) {
       var flats = group.top10flat;
       var rejected = group.rejected;
       if (flats.length < 10) {
-        updateTop10Flats(grp_id, flats.map((obj) => obj.id.toString()), rejected.map((obj) => obj.id.toString()), all_usrs.map((obj) => obj.id.toString()))
+        try{await updateTop10Flats(grp_id, flats.map((obj) => obj.id.toString()), rejected.map((obj) => obj.id.toString()), all_usrs.map((obj) => obj.id.toString()))} catch (err) {console.log(err);}
         try {group = await Group.findById(grp_id);}
         catch (err) {console.log(err);}
         flats = group.top10flat;
@@ -204,13 +238,25 @@ router.get('/getFlats', async function(req, res, next) {
         if (!group_flat_fora) {group_flat_fora = []}
         else {group_flat_fora = group_flat_fora.map(obj => {return {'message': obj.message, 'sender': id_username_dict[obj.sender], 'timestamp': 0}})}
         result.push({
-          'flat': flat,
-          'my_review': my_review,
-          'feedback': feedback,
-          'accepts': accepts,
-          'rejects': rejects,
-          'no_opinion': no_opinion,
-          'forum': group_flat_fora
+          pictures: flat.pictures,
+          location: flat.location,
+          district: flat.district,
+          contact: flat.contact,
+          description: flat.description,
+          street_address: flat.street_address,
+          bhk: flat.bhk,
+          rent: flat.rent,
+          area: flat.area,
+          toilets: flat.toilets,
+          amenities_5km: flat.amenities_5km,
+          tags: flat.tags.map((obj) => tag_id_name_map[obj.id]),
+          my_review: my_review,
+          feedback: feedback,
+          accepts: accepts,
+          rejects: rejects,
+          no_opinion: no_opinion,
+          forum: group_flat_fora,
+          id: flats[i].id.toString(),
         });
       }
     }
@@ -224,13 +270,16 @@ router.get('/getRoommateSuggestions', async function(req, res, next){
   var allUserIDs = {};
   var thisUserData = {};
   try {allUserIDs = await User.find({}, '_id');} catch (err) {console.log(err);}
-  try {thisUserData = await User.findById(id);} catch (err) {console.log(err);}
+  console.log(allUserIDs);
+  try {thisUserData = await User.findOne({_id: id});} catch (err) {console.log(err); res.status(500).send(); return;}
+  console.log(thisUserData);
   accepted_users = new Set(thisUserData.accepted_users.map((obj) => obj.id));
   rejected_users = new Set(thisUserData.rejected_users.map((obj) => obj.id));
   var all_ids = allUserIDs.map((obj) => obj._id.toString()).filter((obj) => !accepted_users.has(obj)).filter((obj) => !rejected_users.has(obj)).filter((obj) => obj != id);
   console.log(all_ids);
   var scores = [];
   var userData = [];
+  console.log(all_ids);
   for (let i=0; i<all_ids.length; ++i) {
     var query_user = {};
     try {query_user = await User.findById(all_ids[i])} catch (err) {console.log(err);}
@@ -314,7 +363,7 @@ router.get('/getGroupsForUsers', async function(req, res, next) {
 })
 
 router.get('/getUser', function(req, res, next) {
-  const id = req.query.userid;
+  const id = req.query.id;
 
   User.findById(id, function(err, user) {
     if (err) {
@@ -322,6 +371,7 @@ router.get('/getUser', function(req, res, next) {
       res.status(500).send();
     } else {
       // send user details to client side as json
+      console.log(user);
       res.json(user);
     }
   });
@@ -387,6 +437,9 @@ router.post('/saveUser', function(req, res, next) {
     roommate_priorities: req.body.roommate_priorities,
     // add more fields here
   });
+  if (user.picture.length == 0) {
+    user.picture = "https://fastly.picsum.photos/id/699/600/800.jpg?hmac=jFTBNa5ATcFsNWhJcKO6eghQfYYtvz7fi3wUcI0NWnc";
+  }
 
   user.save(function(err, user) {
     if (err) {
