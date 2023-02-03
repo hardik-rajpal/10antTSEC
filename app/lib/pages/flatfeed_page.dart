@@ -42,10 +42,14 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
         Navigator.of(context).popAndPushNamed(MainDrawer.auth);
       } else {
         userIDToken = useridToken;
+        if (userIDToken.isEmpty) {
+          userIDToken = widget.userCubit.state.user!.uuid;
+          useridToken = userIDToken;
+        }
         RemoteDataService().getUserGroups(useridToken).then((ingroups) {
           log('ingroups len: ${ingroups.length}for: $useridToken');
           RemoteDataService()
-              .getFlatFeed(ingroups[0].id, useridToken)
+              .getFlatFeed(ingroups[0].id, useridToken!)
               .then((value) {
             setState(() {
               groups = ingroups;
