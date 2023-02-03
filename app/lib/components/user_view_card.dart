@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
+import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/components/images.dart';
+import 'package:ten_ant/services/remote_data_service.dart';
 
 class UserViewCard extends StatefulWidget {
   final UserDetails details;
@@ -14,12 +16,69 @@ class UserViewCard extends StatefulWidget {
 
 class _UserViewCardState extends State<UserViewCard> {
   late UserDetails details;
+  List<Tag> locationPriorityTags = [];
   @override
   void initState() {
+    RemoteDataService().getLocationTags().then((value) {
+      if (mounted) {
+        setState(() {
+          locationPriorityTags = value;
+        });
+      }
+    });
     details = widget.details;
-    log('email:' + details.email);
-    log('gender: ' + details.gender);
+
     super.initState();
+  }
+
+  ActionChip getChip(
+      String name, String id, List<String> selectedList, Function onPress) {
+    return ActionChip(
+      labelPadding: const EdgeInsets.all(2.0),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: (selectedList.contains(id)
+                  ? const Icon(
+                      Icons.check,
+                      size: 15,
+                    )
+                  : const Icon(
+                      Icons.cancel,
+                      size: 15,
+                    )))
+        ],
+      ),
+      backgroundColor:
+          selectedList.contains(id) ? Colors.primaries[7] : Colors.primaries[5],
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: const EdgeInsets.all(8.0),
+      onPressed: () {
+        onPress();
+      },
+    );
+  }
+
+  Widget _buildLocationChips(BuildContext context) {
+    List<String> locprilist =
+        widget.details.locationPriorities.map((e) => e.id).toList();
+    return Wrap(
+      spacing: 8.0, // gap between adjacent chips
+      runSpacing: 4.0,
+      children: locationPriorityTags
+          .where((e) => locprilist.contains(e.id))
+          .map((e) => getChip(e.name, e.id, locprilist, () {}))
+          .toList(),
+    );
   }
 
   @override
@@ -152,7 +211,9 @@ class _UserViewCardState extends State<UserViewCard> {
                       ),
                     ),
                     subtitle: Text(
-                      details.languages.join(', '),
+                      (details.languages.isNotEmpty)
+                          ? details.languages.join(', ')
+                          : 'English',
                       // ignore: prefer_const_constructors
                       style: TextStyle(
                         fontSize: 18,
@@ -179,6 +240,7 @@ class _UserViewCardState extends State<UserViewCard> {
                       ),
                     ),
                   ),
+                  _buildLocationChips(context)
                 ],
               ),
             ],

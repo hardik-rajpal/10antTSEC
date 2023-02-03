@@ -13,7 +13,7 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://b651-103-246-224-250.ngrok.io';
+    baseUrl ??= 'http://bd29-103-246-224-250.ngrok.io/';
   }
 
   final Dio _dio;
@@ -275,6 +275,36 @@ class _TenantApi implements TenantApi {
         )
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     return null;
+  }
+
+  @override
+  Future<dynamic> roomieFeedback(
+    id,
+    tid,
+    score,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'id': id,
+      r'tid': tid,
+      r'score': score,
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/roommateFeedback',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
