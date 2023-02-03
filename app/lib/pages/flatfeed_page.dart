@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +9,7 @@ import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
+import 'package:ten_ant/services/local_data_service.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
 import 'package:ten_ant/utils/uifuncs.dart';
@@ -26,22 +29,28 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     // Group(UtilFuncs.getUUID(), 'Me', ['...']),
   ];
   List<Flat> flats = [];
-  bool feadLoaded = false;
+  bool feedLoaded = false;
   @override
   void initState() {
     super.initState();
-    RemoteDataService()
-        .getUserGroups(widget.userCubit.state.user!.uuid)
-        .then((ingroups) {
-      RemoteDataService()
-          .getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid)
-          .then((value) {
-        setState(() {
-          flats = value;
-          groups = ingroups;
-          feadLoaded = true;
+    LocalDataService().getUserIDToken().then((useridToken) {
+      if (useridToken == null) {
+        Navigator.of(context).popAndPushNamed(MainDrawer.auth);
+      } else {
+        RemoteDataService().getUserGroups(useridToken).then((ingroups) {
+          log('ingroups len: ${ingroups.length}for: $useridToken');
+          RemoteDataService()
+              .getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid)
+              .then((value) {
+            setState(() {
+              flats = value;
+              groups = ingroups;
+              feedLoaded = true;
+              log('flats length${flats.length}');
+            });
+          });
         });
-      });
+      }
     });
   }
 
@@ -52,7 +61,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       appBar: AppBar(
         title: const Text('Flat Feed'),
       ),
-      body: (feadLoaded)
+      body: (feedLoaded)
           ? Column(children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -110,7 +119,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                 ),
               )
             ])
-          : const CircularProgressIndicator(),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 

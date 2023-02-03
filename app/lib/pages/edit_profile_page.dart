@@ -297,6 +297,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 widget.userCubit.userid = newDetails.id!;
                                 widget.userCubit.state.user!.uuid =
                                     newDetails.id!;
+                                await LocalDataService().saveAuthenticatedUser(
+                                    widget.userCubit.state.user!);
                                 widget.userCubit.setActiveUser(
                                     widget.userCubit.state.user!);
                                 log('userid: ' + newDetails.id!);

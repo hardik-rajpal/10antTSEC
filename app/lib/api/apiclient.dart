@@ -9,7 +9,7 @@ import 'package:ten_ant/api/response/tag.dart';
 
 part 'apiclient.g.dart';
 
-@rt.RestApi(baseUrl: "http://2e70-103-246-224-250.ngrok.io")
+@rt.RestApi(baseUrl: "http://7676-103-246-224-250.ngrok.io/")
 abstract class TenantApi {
   factory TenantApi(Dio dio, {String baseUrl}) = _TenantApi;
 

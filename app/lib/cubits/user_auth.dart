@@ -26,7 +26,7 @@ class UserAuthCubit extends Cubit<UserAuthState> {
   }
 
   setActiveUser(User user) async {
-    await localDB.saveAuthenticatedUser(user);
+    // await localDB.saveAuthenticatedUser(user);
     RemoteDataService.headers["usertoken"] = user.token;
     emit(UserAuthState(state.localChecked, user, state.isTenantMode));
   }

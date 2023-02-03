@@ -3,6 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/models/common.dart';
 import 'package:ten_ant/pages/edit_profile_page.dart';
+import 'package:ten_ant/pages/flatfeed_page.dart';
+import 'package:ten_ant/services/local_data_service.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/helpers.dart';
 
@@ -18,18 +20,30 @@ class _LoginPageState extends State<LoginPage> {
   late UserAuthState authState = widget.userCubit.state;
   @override
   void initState() {
-    widget.userCubit.stream.listen((event) {
-      if (mounted) {
-        setState(() {
-          authState = event;
-          if (event.user != null) {
-            // String? userid = event.user?.uuid;
+    widget.userCubit.stream.listen((event) async {
+      if (event.user != null) {
+        if (mounted) {
+          String? useridtoken = await LocalDataService().getUserIDToken();
+          if (useridtoken == null) {
             Navigator.of(context)
                 .pushReplacement(MaterialPageRoute(builder: (context) {
               return EditProfilePage(userCubit: widget.userCubit);
             }));
+          } else {
+            if (event.user!.uuid.isNotEmpty) {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) {
+                return FlatFeedPage(userCubit: widget.userCubit);
+              }));
+            }
           }
-        });
+          setState(() {
+            authState = event;
+            if (event.user != null) {
+              // String? userid = event.user?.uuid;
+            }
+          });
+        }
       }
     });
     super.initState();
@@ -41,9 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            RemoteDataService()
-        .getUserDetails("111");
-            // signInWithGoogle(widget.userCubit);
+            signInWithGoogle(widget.userCubit);
           },
           child: const Text('Sign in with Google'),
         ),

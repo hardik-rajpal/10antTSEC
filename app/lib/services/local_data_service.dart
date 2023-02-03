@@ -14,8 +14,6 @@ class LocalDataService {
   LocalStorage noteDB = LocalStorage('coreader_note');
   LocalStorage deleteDB = LocalStorage('coreader_deletes');
   Future<User?> getAuthenticatedUser() async {
-    RemoteDataService().addFlat(Flat());
-    
     await userdb.ready;
     String? useridtoken = userdb.getItem('useridtoken');
 
@@ -47,7 +45,7 @@ class LocalDataService {
 
   saveAuthenticatedUser(User user) async {
     await userdb.ready;
-    await userdb.setItem('useridtoken', '${user.uuid}_${user.token}');
+    await userdb.setItem('useridtoken', user.uuid);
     log('set useridtoken as: ${user.token}');
     List<dynamic>? cachedUsers = userdb.getItem('users');
     cachedUsers ??= [];
@@ -62,5 +60,10 @@ class LocalDataService {
   unauthenticateUser() async {
     await userdb.ready;
     await userdb.deleteItem('useridtoken');
+  }
+
+  Future<String?> getUserIDToken() async {
+    await userdb.ready;
+    return userdb.getItem('useridtoken');
   }
 }
