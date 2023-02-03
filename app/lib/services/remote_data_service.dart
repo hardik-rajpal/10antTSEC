@@ -55,14 +55,8 @@ class RemoteDataService {
   Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
 
   Future<List<UserDetails>> getRoomieFeed(String uuid) async {
-    //TODO: backend
-    return Future.delayed(const Duration(milliseconds: 500), () {
-      return [
-        UserDetails(),
-        UserDetails(),
-        UserDetails(),
-      ];
-    });
+    final List<UserDetails> resp = await client.getRoomieFeed(uuid);
+    return resp;
   }
 
   Future<List<Flat>> getMyFlats(String id) async {
