@@ -40,7 +40,6 @@ class RemoteDataService {
     return resp;
   }
 
-  //TODO: backend getFlatFeed returns zero
   Future<List<Flat>> getFlatFeed(String gid, String uuid) async {
     log('$gid, and $uuid');
     final List<Flat> resp = await client.getFlatFeed(gid, uuid);

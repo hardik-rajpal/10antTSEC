@@ -108,6 +108,30 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                           ReactionCountButton(
                                               icon: Styles.dislikeIcon,
                                               userList: flat.dislikeArray),
+                                          Row(
+                                            children: [
+                                              Styles.likeIcon,
+                                              // Text()
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              RedCrossedButton(
+                                                  onPress: () {
+                                                    showReviewDialog(
+                                                        context, flat);
+                                                  },
+                                                  label: 'Dislike'),
+                                              GreenCheckButton(
+                                                  onPress: () {
+                                                    showReviewDialog(
+                                                        context, flat);
+                                                  },
+                                                  label: 'Like')
+                                            ],
+                                          )
                                         ],
                                       ),
                                     );

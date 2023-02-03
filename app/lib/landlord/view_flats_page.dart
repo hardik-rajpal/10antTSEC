@@ -22,7 +22,7 @@ class _ViewFlatsState extends State<ViewFlats> {
   @override
   void initState() {
     RemoteDataService()
-        .getMyFlats(widget.userCubit.state.user!.uuid)
+        .getMyFlats(widget.userCubit.state.user!.token)
         .then((values) {
       setState(() {
         flats = values;
@@ -55,8 +55,8 @@ class _ViewFlatsState extends State<ViewFlats> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Image(
-                              image:
-                                  getCachedNetworkImage(flats[index].pictures[0]),
+                              image: getCachedNetworkImage(
+                                  flats[index].pictures[0]),
                               width: 100,
                               height: 100,
                             ),
