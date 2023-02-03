@@ -111,6 +111,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                           RedCrossedButton(
                               onPress: () async {
                                 _matchEngine.currentItem!.nope();
+                                // await RemoteDataService().postMessage("63db9abcec70a672e3e00b9d", "63dc94794fe61ffc17305111","Thats a really good house bro!", widget.userCubit.state.user!.token);
                                 await RemoteDataService().roomieFeedback(
                                     widget.userCubit.state.user!.token,
                                     swipeCards[curr_index].content.id,

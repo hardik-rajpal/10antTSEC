@@ -59,8 +59,8 @@ class RemoteDataService {
     await client.postMessage(flat, group, message, sender);
   }
 
-  Future<void> registerFeedback(String user_id, String flat_id, String feedback, int score) async {
-    await client.registerFeedback(user_id, flat_id, feedback, score);
+  Future<void> registerFeedback(String user_id, String flat_id, String grp_id, String feedback, int score) async {
+    await client.registerFeedback(user_id, flat_id, grp_id, feedback, score);
   }
 
   Future<List<UserDetails>> getRoomieFeed(String uuid) async {

@@ -121,13 +121,13 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                               RedCrossedButton(
                                                   onPress: () {
                                                     showReviewDialog(
-                                                        context, flat);
+                                                        context, flat, -1);
                                                   },
                                                   label: 'Dislike'),
                                               GreenCheckButton(
                                                   onPress: () {
                                                     showReviewDialog(
-                                                        context, flat);
+                                                        context, flat, 1);
                                                   },
                                                   label: 'Like')
                                             ],
@@ -148,10 +148,10 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     );
   }
 
-  void showReviewDialog(BuildContext context, Flat flat) {
+  void showReviewDialog(BuildContext context, Flat flat, int score) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
       RemoteDataService().registerFeedback(
-          widget.userCubit.state.user!.uuid, flat.id, _feedbackTextController.text, 1);
+          widget.userCubit.state.user!.token, flat.id, groups[groupID].id, _feedbackTextController.text, score);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
   }
