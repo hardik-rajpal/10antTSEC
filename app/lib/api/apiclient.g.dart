@@ -250,6 +250,7 @@ class _TenantApi implements TenantApi {
   Future<void> registerFeedback(
     user_id,
     flat_id,
+    group_id,
     feedback,
     score,
   ) async {
@@ -257,6 +258,7 @@ class _TenantApi implements TenantApi {
     final queryParameters = <String, dynamic>{
       r'user_id': user_id,
       r'flat_id': flat_id,
+      r'grp_id': group_id,
       r'feedback': feedback,
       r'score': score,
     };

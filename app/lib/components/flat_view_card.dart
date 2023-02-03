@@ -20,10 +20,10 @@ class _FlatViewCardState extends State<FlatViewCard> {
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.red, Colors.deepOrange.shade300],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  stops: const [0.5, 0.9],
+                  colors: [Colors.blue, Colors.deepPurple.shade300],
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight,
+                  stops: const [1.5, 1.9],
                 ),
               ),
               child: Column(
@@ -36,7 +36,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                       ...widget.data.pictures
                           .sublist(0, 3)
                           .map((e) => Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Image.network(
                                   e,
                                   width:
@@ -50,23 +50,30 @@ class _FlatViewCardState extends State<FlatViewCard> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    widget.data.street,
-                    // ignore: prefer_const_constructors
-                    style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  Padding(padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Text(
+                        widget.data.street,
+                        // ignore: prefer_const_constructors
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                   ),
                   Text(
                     widget.data.description,
                     // ignore: prefer_const_constructors
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25,
+                      fontSize: 20,
                     ),
                   ),
+                      ],
+                    ),
+                  )
+                  ,
                 ],
               ),
             ),
@@ -78,7 +85,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'Street Address',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -97,7 +104,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'District',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -116,7 +123,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'Contact',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -135,7 +142,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                   title: Text(
                     'Description',
                     style: const TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -155,7 +162,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'BHK',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -175,7 +182,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'Rent',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -195,7 +202,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'Area',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -215,7 +222,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     'Toilets',
                     // ignore: prefer_const_constructors
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Colors.deepPurple,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -235,7 +242,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                       'Amenities',
                       // ignore: prefer_const_constructors
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Colors.deepPurple,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -258,7 +265,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                       'Features',
                       // ignore: prefer_const_constructors
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Colors.deepPurple,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),

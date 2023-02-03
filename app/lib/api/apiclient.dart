@@ -42,11 +42,7 @@ abstract class TenantApi {
   Future<List<UserDetails>> getRoomieFeed(@rt.Query("id") String uuid);
 
   @rt.POST('/registerFeedback')
-  Future<void> registerFeedback(
-      @rt.Query("user_id") String user_id,
-      @rt.Query("flat_id") String flat_id,
-      @rt.Query("feedback") String feedback,
-      @rt.Query("score") int score);
+  Future<void> registerFeedback(@rt.Query("user_id") String user_id, @rt.Query("flat_id") String flat_id, @rt.Query("grp_id") String group_id, @rt.Query("feedback") String feedback, @rt.Query("score") int score);
 
   @rt.POST('/roomieFeedback')
   Future<void> roomieFeedback(@rt.Query("id") String id,
