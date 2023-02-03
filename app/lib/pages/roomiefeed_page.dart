@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
+import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/user_view_card.dart';
@@ -23,6 +24,8 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
   bool cardsLoaded = false;
   // ignore: non_constant_identifier_names
   int curr_index = 0;
+  List<Tag> locationPrioritTags = [];
+
   @override
   void initState() {
     RemoteDataService()
@@ -72,7 +75,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                       SizedBox(
-                        height: 550,
+                        height: 650,
                         child: Center(
                           child: SwipeCards(
                             matchEngine: _matchEngine,

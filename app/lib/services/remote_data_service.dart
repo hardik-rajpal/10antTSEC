@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ten_ant/api/apiclient.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/request/flat_landlord.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/api/response/tag.dart';
@@ -68,8 +69,8 @@ class RemoteDataService {
     return resp;
   }
 
-  Future<List<Flat>> getMyFlats(String id) async {
-    final List<Flat> resp = await client.getMyFlats(id);
+  Future<List<FlatLandlord>> getMyFlats(String id) async {
+    final List<FlatLandlord> resp = await client.getMyFlats(id);
     return resp;
   }
 

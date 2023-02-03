@@ -13,7 +13,7 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://2f3f-103-246-224-250.ngrok.io';
+    baseUrl ??= 'http://2f3f-103-246-224-250.ngrok.io/';
   }
 
   final Dio _dio;
@@ -123,13 +123,13 @@ class _TenantApi implements TenantApi {
   }
 
   @override
-  Future<List<Flat>> getMyFlats(id) async {
+  Future<List<FlatLandlord>> getMyFlats(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'id': id};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Flat>>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<FlatLandlord>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -142,7 +142,7 @@ class _TenantApi implements TenantApi {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => Flat.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) => FlatLandlord.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

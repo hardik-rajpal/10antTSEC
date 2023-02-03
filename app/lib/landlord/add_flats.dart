@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/response/tag.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 
 class AddFlats extends StatefulWidget {
@@ -12,17 +13,20 @@ class AddFlats extends StatefulWidget {
 class _AddFlatsState extends State<AddFlats> {
   final _formKey = GlobalKey<FormState>();
   Flat currReq = Flat();
-
-  final interests = [
-    'afffffffffffffffffffaa',
-    'bffffffffffffffffffffffffbb',
-    'rrr',
-    'ffff',
-    'eded',
-    'ffedf'
-  ];
+  List<Tag> locationPriorityTags = [];
+  List<String> locationPriorities = [];
+  List interests = ['1', '2', '3', '4', '5', '6'];
   final selected = [0, 0, 0, 0, 0, 0];
   var number = 0;
+  @override
+  void initState() {
+    RemoteDataService().getLocationTags().then((value) {
+      setState(() {
+        locationPriorityTags = value;
+      });
+    });
+    super.initState();
+  }
 
   Widget _buildChips(BuildContext context) {
     List<Widget> w = [];
@@ -78,7 +82,8 @@ class _AddFlatsState extends State<AddFlats> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.location_on_outlined),
@@ -99,7 +104,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.location_city),
@@ -120,7 +126,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.contact_emergency),
@@ -141,7 +148,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.description),
@@ -162,7 +170,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.streetview),
@@ -183,7 +192,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.bedroom_baby),
@@ -204,7 +214,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.money),
@@ -224,9 +235,9 @@ class _AddFlatsState extends State<AddFlats> {
                               return null;
                             },
                           )),
-
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.area_chart),
@@ -247,7 +258,8 @@ class _AddFlatsState extends State<AddFlats> {
                             },
                           )),
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.money),
@@ -267,9 +279,9 @@ class _AddFlatsState extends State<AddFlats> {
                               return null;
                             },
                           )),
-
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.three_g_mobiledata),
@@ -289,9 +301,9 @@ class _AddFlatsState extends State<AddFlats> {
                               return null;
                             },
                           )),
-
                       Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.airplanemode_inactive_sharp),
@@ -311,8 +323,9 @@ class _AddFlatsState extends State<AddFlats> {
                               return null;
                             },
                           )),
-                          Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                      Container(
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.airplanemode_inactive_sharp),
@@ -332,8 +345,9 @@ class _AddFlatsState extends State<AddFlats> {
                               return null;
                             },
                           )),
-                          Container(
-                          margin: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
+                      Container(
+                          margin:
+                              const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               icon: Icon(Icons.airplanemode_inactive_sharp),
@@ -362,11 +376,11 @@ class _AddFlatsState extends State<AddFlats> {
                           ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                var resp = await RemoteDataService().addFlat(currReq);
+                                var resp =
+                                    await RemoteDataService().addFlat(currReq);
                                 // ignore: unrelated_type_equality_checks
                                 if (resp == "success") {
-                                  Navigator.of(context)
-                                      .pop();
+                                  Navigator.of(context).pop();
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
@@ -392,4 +406,3 @@ class _AddFlatsState extends State<AddFlats> {
                 ))));
   }
 }
-
