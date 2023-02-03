@@ -30,7 +30,7 @@ class RemoteDataService {
   }
 
   Future<UserDetails> getUserDetails(String uuid) async {
-    log('uuid sent for details' + uuid);
+    log('uuid sent for details$uuid');
     final UserDetails resp = await client.getUserDetails(uuid);
     return resp;
   }
@@ -93,7 +93,7 @@ class RemoteDataService {
       Tag t = Tag();
       t.id = "asdf";
       t.name = "asdf";
-      return Future.delayed(Duration(milliseconds: 500), () => [t, t, t]);
+      return Future.delayed(const Duration(milliseconds: 500), () => [t, t, t]);
     }
   }
 

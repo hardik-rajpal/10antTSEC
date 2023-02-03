@@ -9,7 +9,6 @@ import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/flat_view_card.dart';
-import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/services/local_data_service.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
@@ -138,6 +137,20 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       flats.add(await RemoteDataService()
           .getFlatFeed(groups[i].id, widget.userCubit.state.user!.token));
     }
+    Flat f = Flat();
+    f.pictures = [
+      Values.imagePlaceholder,
+      Values.imagePlaceholder,
+      Values.imagePlaceholder
+    ];
+    f.bhk = 3;
+    f.amenities = ['Sports Club', 'Hospital'];
+    f.area = 3400;
+    f.contact = 'Contact Details';
+    f.description = 'Nice lampin spot.';
+    f.dislikeArray = [];
+    // f.likeArray = []
+    // flats = [f];
     setState(() {
       flatsLoaded = true;
     });
