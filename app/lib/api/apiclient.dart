@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart' as rt;
 import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/request/flat_landlord.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
 import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/api/response/roomietag.dart';
@@ -27,7 +28,7 @@ abstract class TenantApi {
       @rt.Query("gid") String gid, @rt.Query("id") String id);
 
   @rt.GET("/getflatslisted")
-  Future<List<Flat>> getMyFlats(@rt.Query("id") String id);
+  Future<List<FlatLandlord>> getMyFlats(@rt.Query("id") String id);
 
   @rt.POST('/saveUser')
   Future<UserDetails> addUserToDB(@rt.Body() UserDetails details);
