@@ -52,7 +52,13 @@ class RemoteDataService {
     return resp;
   }
 
-  Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
+  Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {
+    // await client.submitUserFlatInteraction(uuid, uuid2);
+  }
+
+  Future<void> registerFeedback(String user_id, String flat_id, String feedback, String score) async {
+    await client.registerFeedback(user_id, flat_id, feedback, score);
+  }
 
   Future<List<UserDetails>> getRoomieFeed(String uuid) async {
     final List<UserDetails> resp = await client.getRoomieFeed(uuid);
@@ -93,5 +99,9 @@ class RemoteDataService {
 
   getRoommateTags() {
     return client.getRoomieTags();
+  }
+
+  Future<void> roomieFeedback(String id, String tid, int score) async {
+    await client.roomieFeedback(id, tid, score);
   }
 }

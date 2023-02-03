@@ -19,6 +19,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
   List<SwipeItem> swipeCards = [];
   late MatchEngine _matchEngine;
   bool cardsLoaded = false;
+  int curr_index = 0;
   @override
   void initState() {
     RemoteDataService()
@@ -27,7 +28,25 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
       setState(() {
         swipeCards = value
             .map((userDetail) => SwipeItem(
-                content: userDetail, likeAction: () {}, nopeAction: () {}))
+                content: userDetail,
+                likeAction: () async {
+                  await RemoteDataService().roomieFeedback(
+                      widget.userCubit.state.user!.token,
+                      swipeCards[curr_index].content.id,
+                      1);
+                  setState(() {
+                    curr_index++;
+                  });
+                },
+                nopeAction: () async {
+                  await RemoteDataService().roomieFeedback(
+                      widget.userCubit.state.user!.token,
+                      swipeCards[curr_index].content.id,
+                      -1);
+                  setState(() {
+                    curr_index++;
+                  });
+                }))
             .toList();
         _matchEngine = MatchEngine(swipeItems: swipeCards);
         cardsLoaded = true;
@@ -74,13 +93,27 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GreenCheckButton(
-                              onPress: () {
+                              onPress: () async {
                                 _matchEngine.currentItem!.like();
+                                await RemoteDataService().roomieFeedback(
+                                    widget.userCubit.state.user!.token,
+                                    swipeCards[curr_index].content.id,
+                                    1);
+                                setState(() {
+                                  curr_index++;
+                                });
                               },
                               label: 'Like'),
                           RedCrossedButton(
-                              onPress: () {
+                              onPress: () async {
                                 _matchEngine.currentItem!.nope();
+                                await RemoteDataService().roomieFeedback(
+                                    widget.userCubit.state.user!.token,
+                                    swipeCards[curr_index].content.id,
+                                    -1);
+                                setState(() {
+                                  curr_index++;
+                                });
                               },
                               label: 'Dislike')
                         ],
