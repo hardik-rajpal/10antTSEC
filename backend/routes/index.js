@@ -8,6 +8,7 @@ const RoommateTag = require("../models/roommate_tag");
 const Group = require("../models/group");
 const Flat = require("../models/flat");
 const UserFlatFeedback = require("../models/user_flat_feedback");
+const GroupFlatForum = require("../models/group_flat_forum");
 
 // Connect to the database
 mongoose.connect(uri, { useNewUrlParser: true });
@@ -135,9 +136,12 @@ router.post('/deleteFeedback', function(req, res, next) {
   })
 })
 
-router.get('/getFlats', function(req, res, next) {
+router.get('/getFlats', async function(req, res, next) {
   const grp_id = req.query.gid;
   const usr_id = req.query.id;
+
+  var my_usr = {}
+  try {my_usr = await User.findById(usr_id);} catch (err) {console.log(err); res.status(500).send(); return;}
 
   Group.findById(grp_id, async function(err, group){
     if(err){
@@ -167,6 +171,7 @@ router.get('/getFlats', function(req, res, next) {
         var rejects = [];
         var no_opinion = [];
         var feedback = "";
+        var id_username_dict = {usr_id: my_usr.username};
         try {
           flat_feedback = await UserFlatFeedback.findOne({$and: [{user_id: usr_id}, {flat_id: flats[i].id}]});
           if (flat_feedback) {my_review = flat_feedback.score; feedback = flat_feedback.feedback;}
@@ -183,6 +188,7 @@ router.get('/getFlats', function(req, res, next) {
               'id': all_usrs[j].id,
               'username': user.username,
             })
+            id_username_dict[all_usrs[j].id] = user.username;
             try {
               var flat_feedback = await UserFlatFeedback.findOne({$and: [{user_id: all_usrs[j].id}, {flat_id: flats[i].id}]});
               if (flat_feedback) {score = flat_feedback.score;} else {score = 0;}
@@ -192,13 +198,19 @@ router.get('/getFlats', function(req, res, next) {
             catch (err) {console.log(err); no_opinion.push(user_data[j]);}
           }
         }
+        var group_flat_fora = []
+        try {group_flat_fora = await GroupFlatForum.find({$and: [{flat: flats[i].id}, {group: req.query.gid}]})}
+        catch (err) {console.log(err);}
+        if (!group_flat_fora) {group_flat_fora = []}
+        else {group_flat_fora = group_flat_fora.map(obj => {return {'message': obj.message, 'sender': id_username_dict[obj.sender], 'timestamp': 0}})}
         result.push({
           'flat': flat,
           'my_review': my_review,
           'feedback': feedback,
           'accepts': accepts,
           'rejects': rejects,
-          'no_opinion': no_opinion
+          'no_opinion': no_opinion,
+          'forum': group_flat_fora
         });
       }
     }
@@ -209,11 +221,14 @@ router.get('/getFlats', function(req, res, next) {
 
 router.get('/getRoommateSuggestions', async function(req, res, next){
   const id = req.query.id;
-  var allUserIDs = User.find({}, '_id');
-  var thisUserData = User.findById(req.query.id);
+  var allUserIDs = {};
+  var thisUserData = {};
+  try {allUserIDs = await User.find({}, '_id');} catch (err) {console.log(err);}
+  try {thisUserData = await User.findById(id);} catch (err) {console.log(err);}
   accepted_users = new Set(thisUserData.accepted_users.map((obj) => obj.id));
   rejected_users = new Set(thisUserData.rejected_users.map((obj) => obj.id));
-  var all_ids = allUserData.map((obj) => obj._id.toString()).filter((obj) => !accepted_users.has(obj)).filter((obj) => !rejected_users.has(obj)).filter((obj) => obj != id);
+  var all_ids = allUserIDs.map((obj) => obj._id.toString()).filter((obj) => !accepted_users.has(obj)).filter((obj) => !rejected_users.has(obj)).filter((obj) => obj != id);
+  console.log(all_ids);
   var scores = [];
   var userData = [];
   for (let i=0; i<all_ids.length; ++i) {
@@ -221,7 +236,7 @@ router.get('/getRoommateSuggestions', async function(req, res, next){
     try {query_user = await User.findById(all_ids[i])} catch (err) {console.log(err);}
     query_user.id = query_user._id.toString();
     userData.push(query_user);
-    var score = 0;
+    score = 0;
     for (roommate_priority of thisUserData.roommate_priorities) {
       for (option_priority of query_user.roommate_priorities) {
         if (roommate_priority.option.toString() == option_priority.option.toString()) {
@@ -275,7 +290,7 @@ router.get('/checkroommatesugg', async function(req, res, next) {
   var argsorted = [...Array(userData.length).keys()];
   argsorted.sort((b, a) => scores[a] - scores[b]);
   result = argsorted.map((id) => userData[id]);
-  console.log(result, scores);
+  res.send(result);
 })
 
 router.get('/getGroupsForUsers', async function(req, res, next) {
@@ -357,17 +372,19 @@ router.get('/getFlatsListed', async function(req, res, next) {
 })
 
 router.post('/saveUser', function(req, res, next) {
+  console.log(req.body.location_priorities);
+  console.log(req.body.roommate_priorities);
   const user = new User({
-    email: req.query.email,
-    name: req.query.name,
-    age: req.query.age,
-    username: req.query.username,
-    picture: req.query.picture,
-    gender: req.query.gender,
-    languages: req.query.languages,
-    budget: req.query.budget,
-    location_priorities: [],
-    roommate_priorities: [],
+    email: req.body.email,
+    name: req.body.name,
+    age: req.body.age,
+    username: req.body.username,
+    picture: req.body.picture,
+    gender: req.body.gender,
+    languages: req.body.languages,
+    budget: req.body.budget,
+    location_priorities: req.body.location_priorities,
+    roommate_priorities: req.body.roommate_priorities,
     // add more fields here
   });
 
@@ -377,19 +394,29 @@ router.post('/saveUser', function(req, res, next) {
       res.status(500).send();
     } else {
       const uid = user._id.toString();
-      // send user id to client side as json
+      const groupIndividual = new Group({
+        users: [{id: uid}],
+        name: "Individual " + user.username,
+        city: "Mumbai"
+      })
+
+      groupIndividual.save(function(err, group) {
+        if (err) {console.log(err); res.status(500).send();}
+        else {}
+      })
+
       res.json({
         id: uid,
-        email: req.query.email,
-        name: req.query.name,
-        age: req.query.age,
-        username: req.query.username,
-        picture: req.query.picture,
-        gender: req.query.gender,
-        languages: req.query.languages,
-        budget: req.query.budget,
-        location_priorities: [],
-        roommate_priorities: [],
+        email: user.email,
+        name: user.name,
+        age: user.age,
+        username: user.username,
+        picture: user.picture,
+        gender: user.gender,
+        languages: user.languages,
+        budget: user.budget,
+        location_priorities: user.location_priorities,
+        roommate_priorities: user.roommate_priorities,
       });
     }
   });
@@ -418,6 +445,48 @@ router.get('/roommatePriorities', async function(req, res) {
     })
   }
   res.send(result);
+})
+
+router.post('/addFlat', async function(req, res) {
+  var flat = new Flat({
+    location: req.body.location,
+    district: req.body.district,
+    contact: req.body.contact,
+    description: req.body.description,
+    street_address: req.body.street_address,
+    bhk: req.body.bhk,
+    rent: req.body.rent,
+    area: req.body.area,
+    toilets: req.body.toilets,
+    amenities_5km: req.body.amenities_5km,
+    tags: req.body.tags,
+    owner: req.body.owner
+  })
+
+  flat.save(function(err, flat) {
+    if (err) {
+      console.log(err);
+      res.status(500).send();
+      return;
+    }
+    else {}
+  })
+})
+
+router.post('/postMessage', async function(req, res) {
+  var group_flat_msg = new GroupFlatForum({
+    flat: req.body.flat,
+    group: req.body.group,
+    message: req.body.message,
+    sender: req.body.sender
+  })
+
+  group_flat_msg.save(function (err, res) {
+    if (err) {
+      console.log(err);
+      res.status(500).send();
+    } else {}
+  })
 })
 
 module.exports = router;

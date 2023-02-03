@@ -30,7 +30,7 @@ const FlatSchema = new mongoose.Schema(
     // bus: {type: String},
     // school: {type: String},
 
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: "UserSchema"},
+    owner: {type: String},
   },
   { collection: "flat" }
 );
