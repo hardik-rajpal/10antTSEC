@@ -46,11 +46,18 @@ abstract class TenantApi {
       @rt.Query("user_id") String user_id,
       @rt.Query("flat_id") String flat_id,
       @rt.Query("feedback") String feedback,
-      @rt.Query("score") String score);
+      @rt.Query("score") int score);
 
   @rt.POST('/roomieFeedback')
   Future<void> roomieFeedback(@rt.Query("id") String id,
       @rt.Query("tid") String tid, @rt.Query("score") int score);
+
+  @rt.POST('/postMessage')
+  Future<void> postMessage(
+      @rt.Query("flat") String flat,
+      @rt.Query("group") String group,
+      @rt.Query("message") String message,
+      @rt.Query("sender") String sender);
 
   // @rt.GET("/getflatfeed")
   // Future<void> submitUserFlatInteraction(@rt.Body() String uuid, @rt.Body() String uuid2) {}
