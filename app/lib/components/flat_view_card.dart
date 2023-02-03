@@ -44,14 +44,6 @@ class _FlatViewCardState extends State<FlatViewCard> {
                                 ),
                               ))
                           .toList(),
-                      CircleAvatar(
-                        backgroundColor: Colors.red.shade300,
-                        minRadius: 35.0,
-                        child: const Icon(
-                          Icons.message,
-                          size: 30.0,
-                        ),
-                      ),
                     ],
                   ),
                   // ignore: prefer_const_constructors

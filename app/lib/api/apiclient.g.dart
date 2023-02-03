@@ -13,7 +13,7 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://bd29-103-246-224-250.ngrok.io';
+    baseUrl ??= 'http://2f3f-103-246-224-250.ngrok.io/';
   }
 
   final Dio _dio;

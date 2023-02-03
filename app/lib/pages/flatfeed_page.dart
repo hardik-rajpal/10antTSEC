@@ -95,8 +95,9 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                   ? Expanded(
                       child: CarouselSlider(
                         options: CarouselOptions(
-                            height: double.infinity,
-                            enableInfiniteScroll: false),
+                          height: double.infinity,
+                          enableInfiniteScroll: false,
+                        ),
                         items: flats[groupID]
                             .map((flat) => Builder(
                                   builder: (context) {
@@ -191,7 +192,11 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
 
   _buildForum(
       String flatid, String groupid, String userIDToken, List<ForumMsg> forum) {
-    return Column(children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text(
+        'Discussion Forum',
+        style: Styles.textStyle1,
+      ),
       ...forum
           .map((e) => Card(
                 child: Text('${e.sender}: ${e.message}'),
