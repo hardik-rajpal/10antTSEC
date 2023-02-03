@@ -13,7 +13,11 @@ class _TenantApi implements TenantApi {
     this._dio, {
     this.baseUrl,
   }) {
+<<<<<<< HEAD
     baseUrl ??= 'http://b651-103-246-224-250.ngrok.io/';
+=======
+    baseUrl ??= 'http://b651-103-246-224-250.ngrok.io';
+>>>>>>> 237b7825686e24c64722dc17d08d69419f3cd5fa
   }
 
   final Dio _dio;
@@ -217,6 +221,31 @@ class _TenantApi implements TenantApi {
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
         .map((dynamic i) => RoomieTag.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<UserDetails>> getRoomieFeed(uuid) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'id': uuid};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<UserDetails>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/getRoommateSuggestions',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => UserDetails.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

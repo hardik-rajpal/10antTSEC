@@ -9,7 +9,7 @@ import 'package:ten_ant/api/response/tag.dart';
 
 part 'apiclient.g.dart';
 
-@rt.RestApi(baseUrl: "http://b651-103-246-224-250.ngrok.io/")
+@rt.RestApi(baseUrl: "http://b651-103-246-224-250.ngrok.io")
 abstract class TenantApi {
   factory TenantApi(Dio dio, {String baseUrl}) = _TenantApi;
 
@@ -36,6 +36,9 @@ abstract class TenantApi {
   Future<List<Tag>> getLocationTags();
   @rt.GET('/roommatePriorities')
   Future<List<RoomieTag>> getRoomieTags();
+
+  @rt.GET('/getRoommateSuggestions')
+  Future<List<UserDetails>> getRoomieFeed(@rt.Query("id") String uuid);
 
   // @rt.GET("/getflatfeed")
   // Future<void> submitUserFlatInteraction(@rt.Body() String uuid, @rt.Body() String uuid2) {}
