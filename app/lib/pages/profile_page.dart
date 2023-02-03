@@ -19,8 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     RemoteDataService()
-        .getUserDetails(
-            widget.userCubit.state.user!.uuid)
+        .getUserDetails(widget.userCubit.state.user!.token)
         .then((value) {
       setState(() {
         details = value;

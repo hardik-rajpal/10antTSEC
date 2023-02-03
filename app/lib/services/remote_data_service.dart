@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ten_ant/api/apiclient.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
@@ -28,6 +30,7 @@ class RemoteDataService {
   }
 
   Future<UserDetails> getUserDetails(String uuid) async {
+    log('uuid sent for details' + uuid);
     final UserDetails resp = await client.getUserDetails(uuid);
     return resp;
   }
@@ -37,7 +40,9 @@ class RemoteDataService {
     return resp;
   }
 
+  //TODO: backend getFlatFeed returns zero
   Future<List<Flat>> getFlatFeed(String gid, String uuid) async {
+    log('$gid, and $uuid');
     final List<Flat> resp = await client.getFlatFeed(gid, uuid);
     return resp;
   }
@@ -49,7 +54,8 @@ class RemoteDataService {
 
   Future<void> submitUserFlatInteraction(String uuid, String uuid2) async {}
 
-  Future<List<UserDetails>> getRoomieFeed(String uuid, User usertemp) async {
+  Future<List<UserDetails>> getRoomieFeed(String uuid) async {
+    //TODO: backend
     return Future.delayed(const Duration(milliseconds: 500), () {
       return [
         UserDetails(),

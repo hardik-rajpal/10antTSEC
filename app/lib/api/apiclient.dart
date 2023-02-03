@@ -15,7 +15,7 @@ abstract class TenantApi {
 
   @rt.POST("/addFlat")
   Future<bool> postForm(@rt.Body() Flat req);
-
+  //TODO: backend
   @rt.GET("/getUser")
   Future<UserDetails> getUserDetails(@rt.Query("id") String userid);
 

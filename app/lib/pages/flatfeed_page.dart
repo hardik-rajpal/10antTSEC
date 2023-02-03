@@ -8,6 +8,8 @@ import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/components/dialog.dart';
 import 'package:ten_ant/components/drawer.dart';
+import 'package:ten_ant/components/flat_view_card.dart';
+import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
 import 'package:ten_ant/services/local_data_service.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
@@ -25,11 +27,11 @@ class FlatFeedPage extends StatefulWidget {
 class _FlatFeedPageState extends State<FlatFeedPage> {
   int groupID = 0;
   final TextEditingController _feedbackTextController = TextEditingController();
-  List<Group> groups = [
-    // Group(UtilFuncs.getUUID(), 'Me', ['...']),
-  ];
-  List<Flat> flats = [];
-  bool feedLoaded = false;
+  List<Group> groups = [];
+  List<List<Flat>> flats = [];
+  bool groupsLoaded = false;
+
+  bool flatsLoaded = false;
   @override
   void initState() {
     super.initState();
@@ -40,12 +42,12 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
         RemoteDataService().getUserGroups(useridToken).then((ingroups) {
           log('ingroups len: ${ingroups.length}for: $useridToken');
           RemoteDataService()
-              .getFlatFeed(ingroups[0].id, widget.userCubit.state.user!.uuid)
+              .getFlatFeed(ingroups[0].id, useridToken)
               .then((value) {
             setState(() {
-              flats = value;
               groups = ingroups;
-              feedLoaded = true;
+              groupsLoaded = true;
+              _loadflats();
               log('flats length${flats.length}');
             });
           });
@@ -61,7 +63,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       appBar: AppBar(
         title: const Text('Flat Feed'),
       ),
-      body: (feedLoaded)
+      body: (groupsLoaded)
           ? Column(children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -86,38 +88,38 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                       })
                 ],
               ),
-              Expanded(
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                      height: double.infinity, enableInfiniteScroll: false),
-                  items: flats
-                      .map((flat) => Builder(
-                            builder: (context) {
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Column(
-                                  children: [
-                                    ReactionCountButton(
-                                      icon: Styles.likeIcon,
-                                      userList: flat.likeArray,
-                                    ),
-                                    ReactionCountButton(
-                                        icon: Styles.dislikeIcon,
-                                        userList: flat.dislikeArray),
-                                    // ReactionCountButton(
-                                    //   icon: Styles.questionMark,
-                                    //   userList:
-                                    //       // flat.likeDislikeQuestionArray[2],
-                                    //       ["0"],
-                                    // ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ))
-                      .toList(),
-                ),
-              )
+              (flatsLoaded)
+                  ? Expanded(
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                            height: double.infinity,
+                            enableInfiniteScroll: false),
+                        items: flats[groupID]
+                            .map((flat) => Builder(
+                                  builder: (context) {
+                                    return SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Column(
+                                        children: [
+                                          FlatViewCard(data: flat),
+                                          ReactionCountButton(
+                                            icon: Styles.likeIcon,
+                                            userList: flat.likeArray,
+                                          ),
+                                          ReactionCountButton(
+                                              icon: Styles.dislikeIcon,
+                                              userList: flat.dislikeArray),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    )
             ])
           : const Center(child: CircularProgressIndicator()),
     );
@@ -129,5 +131,15 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
           widget.userCubit.state.user!.uuid, flat.id);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
+  }
+
+  void _loadflats() async {
+    for (int i = 0; i < groups.length; i++) {
+      flats.add(await RemoteDataService()
+          .getFlatFeed(groups[i].id, widget.userCubit.state.user!.token));
+    }
+    setState(() {
+      flatsLoaded = true;
+    });
   }
 }

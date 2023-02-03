@@ -33,7 +33,7 @@ class LocalDataService {
         cachedUsers.where((element) => element["uuid"] == uuid).toList();
     if (matches.isNotEmpty) {
       User user = User.fromJson(matches[0]);
-      user.token = useridtoken.split('_')[1];
+      user.token = useridtoken;
       return user;
     } else {
       // log(matches.toString());

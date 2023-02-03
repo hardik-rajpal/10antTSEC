@@ -22,8 +22,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
   @override
   void initState() {
     RemoteDataService()
-        .getRoomieFeed(
-            widget.userCubit.state.user!.uuid, widget.userCubit.state.user!)
+        .getRoomieFeed(widget.userCubit.state.user!.token)
         .then((value) {
       setState(() {
         swipeCards = value
@@ -87,7 +86,7 @@ class _RoomieFeedPageState extends State<RoomieFeedPage> {
                         ],
                       )
                     ])
-              : const CircularProgressIndicator(),
+              : const Center(child: CircularProgressIndicator()),
         ],
       ),
     );

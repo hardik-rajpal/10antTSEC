@@ -36,7 +36,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
 
     return Center(
       child: SingleChildScrollView(
-        child: ListView(
+        child: Column(
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
@@ -278,7 +278,7 @@ class _FlatViewCardState extends State<FlatViewCard> {
                         )
                       ],
                     )),
-                    ListTile(
+                ListTile(
                     // ignore: prefer_const_constructors
                     title: Text(
                       'Features',
