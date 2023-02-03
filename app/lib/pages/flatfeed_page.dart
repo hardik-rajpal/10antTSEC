@@ -150,8 +150,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
 
   void showReviewDialog(BuildContext context, Flat flat) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
-      RemoteDataService().submitUserFlatInteraction(
-          widget.userCubit.state.user!.uuid, flat.id);
+      RemoteDataService().registerFeedback(
+          widget.userCubit.state.user!.uuid, flat.id, _feedbackTextController.text, 1);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
   }
