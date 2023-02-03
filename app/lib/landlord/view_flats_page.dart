@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/request/flat_landlord.dart';
 import 'package:ten_ant/components/drawer.dart';
 import 'package:ten_ant/components/images.dart';
 import 'package:ten_ant/cubits/user_auth.dart';
@@ -17,7 +18,7 @@ class ViewFlats extends StatefulWidget {
 }
 
 class _ViewFlatsState extends State<ViewFlats> {
-  List<Flat> flats = [];
+  List<FlatLandlord> flats = [];
   bool flatsLoaded = false;
   @override
   void initState() {
@@ -60,9 +61,14 @@ class _ViewFlatsState extends State<ViewFlats> {
                               width: 100,
                               height: 100,
                             ),
-                            Text(
-                              flats[index].street,
-                              style: Styles.textStyle1,
+                            Flexible(
+                              child: Container(
+                                child: Text(
+                                  flats[index].street,
+                                  style: Styles.textStyle1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             )
                           ],
                         )),

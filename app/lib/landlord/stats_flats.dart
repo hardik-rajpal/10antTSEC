@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
+import 'package:ten_ant/api/request/flat_landlord.dart';
 import 'package:ten_ant/components/buttons.dart';
 import 'package:ten_ant/services/remote_data_service.dart';
 import 'package:ten_ant/utils/constants.dart';
 
 class StatsFlats extends StatefulWidget {
-  final Flat flat;
+  final FlatLandlord flat;
   const StatsFlats({super.key, required this.flat});
 
   @override

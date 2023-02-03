@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ten_ant/api/forum_msg.dart';
 import 'package:ten_ant/api/request/add_flat_request.dart';
 import 'package:ten_ant/api/response/get_group_response.dart';
 import 'package:ten_ant/components/buttons.dart';
@@ -29,8 +30,10 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
   List<Group> groups = [];
   List<List<Flat>> flats = [];
   bool groupsLoaded = false;
-
+  String userIDToken = '';
   bool flatsLoaded = false;
+
+  final TextEditingController _mainTextController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -38,6 +41,7 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       if (useridToken == null) {
         Navigator.of(context).popAndPushNamed(MainDrawer.auth);
       } else {
+        userIDToken = useridToken;
         RemoteDataService().getUserGroups(useridToken).then((ingroups) {
           log('ingroups len: ${ingroups.length}for: $useridToken');
           RemoteDataService()
@@ -101,6 +105,11 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                       child: Column(
                                         children: [
                                           FlatViewCard(data: flat),
+                                          _buildForum(
+                                              flat.id,
+                                              groups[groupID].id,
+                                              userIDToken,
+                                              flat.forum),
                                           ReactionCountButton(
                                             icon: Styles.likeIcon,
                                             userList: flat.likeArray,
@@ -150,8 +159,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
 
   void showReviewDialog(BuildContext context, Flat flat) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
-      RemoteDataService().registerFeedback(
-          widget.userCubit.state.user!.uuid, flat.id, _feedbackTextController.text, 1);
+      RemoteDataService().registerFeedback(widget.userCubit.state.user!.uuid,
+          flat.id, _feedbackTextController.text, 1);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
   }
@@ -178,5 +187,51 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
     setState(() {
       flatsLoaded = true;
     });
+  }
+
+  _buildForum(
+      String flatid, String groupid, String userIDToken, List<ForumMsg> forum) {
+    return Column(children: [
+      ...forum
+          .map((e) => Card(
+                child: Text('${e.sender}: ${e.message}'),
+              ))
+          .toList(),
+      Container(
+        color: Colors.blue,
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  // color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: TextField(
+                    controller: _mainTextController,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(5),
+                      border: InputBorder.none,
+                      hintText: 'Enter new words here',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            IconButton(
+                onPressed: () async {
+                  RemoteDataService().postMessage(
+                      flatid, groupid, _mainTextController.text, userIDToken);
+                  _mainTextController.clear();
+                },
+                icon: const FaIcon(
+                  FontAwesomeIcons.paperPlane,
+                ))
+          ],
+        ),
+      )
+    ]);
   }
 }
