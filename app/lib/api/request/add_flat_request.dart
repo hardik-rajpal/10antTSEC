@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ten_ant/api/forum_msg.dart';
+import 'package:ten_ant/api/mini_user.dart';
 
 part 'add_flat_request.g.dart';
 
@@ -11,7 +13,9 @@ class Flat {
   String location = 'a';
 
   @JsonKey(name: "pictures")
-  List<String> pictures = ['https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fe%2Fee%2FChain_link_icon.png&imgrefurl=https%3A%2F%2Fsimple.wikipedia.org%2Fwiki%2FLink&tbnid=mj2OmSHS0LnkzM&vet=12ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ..i&docid=Zr3_2orswxTRnM&w=950&h=400&q=image%20link&ved=2ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ'];
+  List<String> pictures = [
+    'https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fe%2Fee%2FChain_link_icon.png&imgrefurl=https%3A%2F%2Fsimple.wikipedia.org%2Fwiki%2FLink&tbnid=mj2OmSHS0LnkzM&vet=12ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ..i&docid=Zr3_2orswxTRnM&w=950&h=400&q=image%20link&ved=2ahUKEwi979PW6vf8AhXz5nMBHd0mC5AQMygAegUIARDhAQ'
+  ];
 
   @JsonKey(name: "district")
   String district = 'a';
@@ -42,12 +46,19 @@ class Flat {
 
   @JsonKey(name: "tags")
   List<String> features = [];
+  @JsonKey(name: 'accepts')
+  List<MiniUser> likeArray = [];
+  @JsonKey(name: 'rejects')
+  List<MiniUser> dislikeArray = [];
 
-  List<String> likeArray = [];
-  List<String> dislikeArray = [];
-  
+  int my_review = 0;
+  String feedback = '';
+  List<MiniUser> no_opinion = [];
+  List<ForumMsg> forum = [];
   Flat();
-  factory Flat.fromJson(Map<String, dynamic> json) =>
-      _$FlatFromJson(json);
+  factory Flat.fromJson(Map<String, dynamic> json) => _$FlatFromJson(json);
   Map<String, dynamic> toJson() => _$FlatToJson(this);
 }
+
+//forum:
+//list of {message: '', sender: 'UserNAme', timestamp:0}

@@ -12,35 +12,12 @@ class FlatViewCard extends StatefulWidget {
 class _FlatViewCardState extends State<FlatViewCard> {
   @override
   Widget build(BuildContext context) {
-    // return Card(
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Text(
-    //         widget.data.street,
-    //         style: Styles.textStyleHeading,
-    //       ),
-    //       ...widget.data.pictures
-    //           .map((e) => Padding(
-    //                 padding: const EdgeInsets.all(8.0),
-    //                 child: Image.network(e),
-    //               ))
-    //           .toList(),
-    //       Text(
-    //         'Address: ${widget.data.location}',
-    //         style: Styles.textStyle1,
-    //       ),
-    //     ],
-    //   ),
-    // );
-
     return Center(
       child: SingleChildScrollView(
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 250,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.red, Colors.deepOrange.shade300],
@@ -53,13 +30,18 @@ class _FlatViewCardState extends State<FlatViewCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       ...widget.data.pictures
+                          .sublist(0, 3)
                           .map((e) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(e),
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.network(
+                                  e,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                ),
                               ))
                           .toList(),
                       CircleAvatar(

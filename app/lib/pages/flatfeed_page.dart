@@ -108,6 +108,30 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                           ReactionCountButton(
                                               icon: Styles.dislikeIcon,
                                               userList: flat.dislikeArray),
+                                          Row(
+                                            children: [
+                                              Styles.likeIcon,
+                                              // Text()
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              RedCrossedButton(
+                                                  onPress: () {
+                                                    showReviewDialog(
+                                                        context, flat);
+                                                  },
+                                                  label: 'Dislike'),
+                                              GreenCheckButton(
+                                                  onPress: () {
+                                                    showReviewDialog(
+                                                        context, flat);
+                                                  },
+                                                  label: 'Like')
+                                            ],
+                                          )
                                         ],
                                       ),
                                     );
@@ -137,6 +161,20 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
       flats.add(await RemoteDataService()
           .getFlatFeed(groups[i].id, widget.userCubit.state.user!.token));
     }
+    Flat f = Flat();
+    f.pictures = [
+      Values.imagePlaceholder,
+      Values.imagePlaceholder,
+      Values.imagePlaceholder
+    ];
+    f.bhk = 3;
+    f.amenities = ['Sports Club', 'Hospital'];
+    f.area = 3400;
+    f.contact = 'Contact Details';
+    f.description = 'Nice lampin spot.';
+    f.dislikeArray = [];
+    // f.likeArray = []
+    // flats = [f];
     setState(() {
       flatsLoaded = true;
     });

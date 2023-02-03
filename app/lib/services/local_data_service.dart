@@ -2,9 +2,6 @@ import 'dart:developer';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:ten_ant/models/common.dart';
-import 'package:ten_ant/services/remote_data_service.dart';
-
-import '../api/request/add_flat_request.dart';
 
 class LocalDataService {
   LocalStorage userdb = LocalStorage('coreader_users');

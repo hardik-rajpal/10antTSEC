@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ten_ant/api/response/add_user_response.dart';
@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late UserDetails details;
   @override
   void initState() {
-    // log(widget.userCubit.state.user!.token);
+    // log('token: ${widget.userCubit.state.user!.token}');
     RemoteDataService()
         .getUserDetails(widget.userCubit.state.user!.token)
         .then((value) {
