@@ -123,12 +123,6 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
                                               icon: Styles.dislikeIcon,
                                               userList: flat.dislikeArray),
                                           Row(
-                                            children: [
-                                              Styles.likeIcon,
-                                              // Text()
-                                            ],
-                                          ),
-                                          Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
                                             children: [
@@ -164,8 +158,8 @@ class _FlatFeedPageState extends State<FlatFeedPage> {
 
   void showReviewDialog(BuildContext context, Flat flat, int score) {
     singleTextFieldDialog('Feedback', context, _feedbackTextController, () {
-      RemoteDataService().registerFeedback(
-          widget.userCubit.state.user!.token, flat.id, groups[groupID].id, _feedbackTextController.text, score);
+      RemoteDataService().registerFeedback(widget.userCubit.state.user!.token,
+          flat.id, groups[groupID].id, _feedbackTextController.text, score);
       UIFuncs.toast(context: context, text: 'Review submitted');
     }, goLabel: 'Submit');
   }

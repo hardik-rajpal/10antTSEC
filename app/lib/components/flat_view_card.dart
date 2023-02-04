@@ -50,30 +50,30 @@ class _FlatViewCardState extends State<FlatViewCard> {
                   SizedBox(
                     height: 10,
                   ),
-                  Padding(padding: EdgeInsets.all(10.0),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         Text(
-                        widget.data.street,
-                        // ignore: prefer_const_constructors
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          widget.data.street,
+                          // ignore: prefer_const_constructors
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                  ),
-                  Text(
-                    widget.data.description,
-                    // ignore: prefer_const_constructors
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
+                        Text(
+                          widget.data.description,
+                          // ignore: prefer_const_constructors
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
                       ],
                     ),
-                  )
-                  ,
+                  ),
                 ],
               ),
             ),
@@ -249,7 +249,6 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     ),
                     subtitle: Column(
                       children: <Widget>[
-                        Text(widget.data.amenities[0]),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.data.amenities.length,
@@ -272,7 +271,6 @@ class _FlatViewCardState extends State<FlatViewCard> {
                     ),
                     subtitle: Column(
                       children: <Widget>[
-                        Text(widget.data.features[0]),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.data.features.length,
